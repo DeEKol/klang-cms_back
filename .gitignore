@@ -1,0 +1,15 @@
+# Сompiled output
+/dist
+/build
+/node_modules
+
+# IDEs and editors
+/.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Variables
+.env
