@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
+import { LessonModule } from "./lesson/lesson.module";
 
 @Module({
     imports: [
@@ -8,8 +9,15 @@ import { ConfigModule } from "@nestjs/config";
             isGlobal: true,
             envFilePath: ["./.env"],
         }),
+        TypeOrmModule.forRoot({
+            type: "sqlite",
+            database: "database.sqlite",
+            entities: [__dirname + "/**/*.orm-entity{.ts,.js}"],
+            synchronize: true, // ! Только для разработки — не использовать в проде
+        }),
+        LessonModule,
     ],
-    controllers: [AppController],
+    controllers: [],
     providers: [],
     exports: [],
 })

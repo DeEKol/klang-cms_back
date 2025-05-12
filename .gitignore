@@ -13,3 +13,6 @@
 
 # Variables
 .env
+
+#DB
+database.sqlite
