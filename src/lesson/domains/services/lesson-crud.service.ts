@@ -7,7 +7,7 @@ import { UpdateLessonCommand } from "../ports/in/update-lesson.command";
 export class LessonCrudService implements ILessonCrudUseCases {
     constructor(private readonly _lessonCrudPorts: ILessonCrudPorts) {}
 
-    async findLesson(id: number): Promise<LessonEntity | null> {
+    async findLesson(id: string): Promise<LessonEntity | null> {
         const lessonEntity = await this._lessonCrudPorts.loadLesson(id);
         return lessonEntity !== null ? lessonEntity : null;
     }

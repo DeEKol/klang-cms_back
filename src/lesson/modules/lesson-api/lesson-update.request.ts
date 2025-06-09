@@ -1,3 +1,5 @@
-import { ILessonOrmEntity } from "../lesson-persistence/i-lesson.orm-entity";
+export interface LessonUpdateRequest {
+    id: string;
 
-export type LessonUpdateRequest = ILessonOrmEntity;
+    text: string;
+}

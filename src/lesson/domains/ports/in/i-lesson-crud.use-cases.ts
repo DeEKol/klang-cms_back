@@ -5,7 +5,7 @@ import { UpdateLessonCommand } from "./update-lesson.command";
 export const SLessonCrudUseCases = Symbol("LessonCrudUseCases");
 
 export interface ILessonCrudUseCases {
-    findLesson(id: number): Promise<LessonEntity | null>;
+    findLesson(id: string): Promise<LessonEntity | null>;
     findLessonArray(): Promise<LessonEntity[]>;
     saveLesson(command: SaveLessonCommand): Promise<boolean>;
     updateLesson(command: UpdateLessonCommand): Promise<boolean>;

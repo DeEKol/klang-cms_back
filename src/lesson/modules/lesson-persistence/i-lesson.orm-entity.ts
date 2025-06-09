@@ -1,5 +1,7 @@
 export interface ILessonOrmEntity {
-    id: number;
+    idPk: number;
+
+    id: string;
 
     text: string;
 }

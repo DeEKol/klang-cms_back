@@ -2,11 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class LessonResponse {
     @ApiProperty({ example: 1 })
-    id: number;
+    id: string;
     @ApiProperty({ example: "Item name" })
     text: string;
 
-    constructor(id: number, text: string) {
+    constructor(id: string, text: string) {
         this.id = id;
         this.text = text;
     }

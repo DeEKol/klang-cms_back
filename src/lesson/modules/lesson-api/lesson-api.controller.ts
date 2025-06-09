@@ -29,12 +29,12 @@ export class LessonApiController {
     }
 
     @Get("find/:id")
-    // @ApiOperation({ summary: "Get one lesson" })
+    @ApiOperation({ summary: "Get one lesson" })
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, description: "Get one", type: LessonResponse })
     async findOne(@Param() { id }: { id: string }): Promise<LessonResponse | null> {
         // TODO: валидация, проверка начисла
-        const lessonEntity = await this._lessonCrudUseCases.findLesson(+id);
+        const lessonEntity = await this._lessonCrudUseCases.findLesson(id);
 
         const lessonResponse =
             lessonEntity !== null ? new LessonResponse(lessonEntity.id, lessonEntity.text) : null;

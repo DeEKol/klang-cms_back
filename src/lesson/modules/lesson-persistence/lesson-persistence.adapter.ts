@@ -15,8 +15,8 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         private readonly _lessonRepository: Repository<LessonOrmEntity>,
     ) {}
 
-    async loadLesson(id: number): Promise<LessonEntity | null> {
-        const lessonOrmEntity = await this._lessonRepository.findOne({ where: { id: +id } });
+    async loadLesson(id: string): Promise<LessonEntity | null> {
+        const lessonOrmEntity = await this._lessonRepository.findOne({ where: { id: id } });
 
         return lessonOrmEntity !== null ? LessonMapper.mapToDomain(lessonOrmEntity) : null;
     }
@@ -29,7 +29,10 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
     }
 
     async createLesson(lesson: SaveLessonCommand): Promise<boolean> {
-        await this._lessonRepository.save(lesson);
+        const objLesson = new LessonOrmEntity();
+        objLesson.text = lesson.text;
+
+        await this._lessonRepository.save(objLesson);
 
         return true;
     }

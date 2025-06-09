@@ -1,10 +1,15 @@
 export class LessonEntity {
     constructor(
-        private readonly _id: number,
+        private readonly _idPk: number,
+        private readonly _id: string,
         private readonly _text: string,
     ) {}
 
-    get id(): number {
+    get idPk(): number {
+        return this._idPk;
+    }
+
+    get id(): string {
         return this._id;
     }
 
