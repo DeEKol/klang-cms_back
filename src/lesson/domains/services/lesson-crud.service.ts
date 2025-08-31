@@ -1,30 +1,58 @@
-import { ILessonCrudUseCases } from "../ports/in/i-lesson-crud.use-cases";
-import { ILessonCrudPorts } from "../ports/out/i-lesson-crud.ports";
-import { SaveLessonCommand } from "../ports/in/save-lesson.command";
+import { ILessonUseCases } from "../ports/in/i-lesson.use-cases";
+import { LessonPageEntity } from "../entities/lesson-page.entity";
 import { LessonEntity } from "../entities/lesson.entity";
+import { GetLessonCommand } from "../ports/in/get-lesson.command";
+import { DeleteLessonCommand } from "../ports/in/delete-lesson.command";
+import { CreateLessonCommand } from "../ports/in/create-lesson.command";
+import { CreatePageCommand } from "../ports/in/create-page.command";
+import { DeletePageCommand } from "../ports/in/delete-page.command";
+import { UpdatePageCommand } from "../ports/in/update-page.command";
 import { UpdateLessonCommand } from "../ports/in/update-lesson.command";
+import { ILessonCrudPorts } from "../ports/out/i-lesson-crud.ports";
 
-export class LessonCrudService implements ILessonCrudUseCases {
+export class LessonCrudService implements ILessonUseCases {
     constructor(private readonly _lessonCrudPorts: ILessonCrudPorts) {}
 
-    async findLesson(id: string): Promise<LessonEntity | null> {
-        const lessonEntity = await this._lessonCrudPorts.loadLesson(id);
-        return lessonEntity !== null ? lessonEntity : null;
+    async getLesson(command: GetLessonCommand): Promise<LessonEntity | null> {
+        const lessonOrmEntity = await this._lessonCrudPorts.getLesson(command.id);
+
+        return LessonEntity.mapToDomain(lessonOrmEntity);
     }
 
-    findLessonArray(): Promise<LessonEntity[]> {
-        return this._lessonCrudPorts.loadLessonArray();
+    deleteLesson(command: DeleteLessonCommand): Promise<boolean> {
+        return this._lessonCrudPorts.deleteLesson(command.id);
     }
 
-    saveLesson(lesson: SaveLessonCommand): Promise<boolean> {
-        return this._lessonCrudPorts.createLesson(SaveLessonCommand.of(lesson));
+    async createLesson(command: CreateLessonCommand): Promise<LessonEntity | null> {
+        const lessonOrmEntity = await this._lessonCrudPorts.createLesson(command.text);
+
+        return LessonEntity.mapToDomain(lessonOrmEntity);
     }
 
-    updateLesson(lesson: UpdateLessonCommand): Promise<boolean> {
-        return this._lessonCrudPorts.updateLesson(lesson);
+    async createPage(command: CreatePageCommand): Promise<LessonPageEntity | null> {
+        const lessonPageOrmEntity = await this._lessonCrudPorts.createPage(
+            command.text,
+            command.pageNumber,
+            command.lessonId,
+        );
+
+        return LessonPageEntity.mapToDomain(lessonPageOrmEntity);
     }
 
-    deleteLesson(id: string): Promise<boolean> {
-        return this._lessonCrudPorts.deleteLesson(id);
+    deletePage(command: DeletePageCommand): Promise<boolean> {
+        return this._lessonCrudPorts.deletePage(command.lessonId, command.pageNumber);
+    }
+
+    updateLesson(command: UpdateLessonCommand): Promise<boolean> {
+        return this._lessonCrudPorts.updateLesson(command.id, command?.text);
+    }
+
+    updatePage(command: UpdatePageCommand): Promise<boolean> {
+        return this._lessonCrudPorts.updatePage(
+            command.id,
+            command?.pageNumber,
+            command?.text,
+            command?.lessonId,
+        );
     }
 }

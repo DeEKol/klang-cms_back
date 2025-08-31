@@ -1,10 +1,16 @@
+import { TLessonId, TLessonText } from "./i-lesson.use-cases";
+
 export class UpdateLessonCommand {
     constructor(
-        public readonly id: string,
-        public readonly text: string,
+        private readonly _id: TLessonId,
+        private readonly _text?: TLessonText,
     ) {}
 
-    static of(lesson: { id: string; text: string }): UpdateLessonCommand {
-        return new UpdateLessonCommand(lesson.id, lesson.text);
+    get id(): TLessonId {
+        return this._id;
+    }
+
+    get text(): TLessonText | undefined {
+        return this?._text;
     }
 }

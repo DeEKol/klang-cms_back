@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from "typeorm";
-import { ILessonOrmEntity } from "./i-lesson.orm-entity";
 import { v4 as uuidv4 } from "uuid";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from "typeorm";
+import { LessonPageOrmEntity } from "../lesson-page/lesson-page.orm-entity";
 
 @Entity()
-export class LessonOrmEntity implements ILessonOrmEntity {
+export class LessonOrmEntity {
     // * Внутренний технический идентификатор (только для БД)
     @PrimaryGeneratedColumn("increment", { name: "id_pk" })
     idPk: number;
@@ -18,6 +18,9 @@ export class LessonOrmEntity implements ILessonOrmEntity {
 
     @Column()
     text: string;
+
+    @OneToMany(() => LessonPageOrmEntity, (lessonOrmPage) => lessonOrmPage.lesson)
+    lessonPages: LessonPageOrmEntity[];
 
     @BeforeInsert()
     generatePublicId() {

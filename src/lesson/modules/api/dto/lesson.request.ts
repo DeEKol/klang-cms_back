@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class LessonRequest {
-    @ApiProperty({ example: "Lesson test text", description: "Lesson test text" })
+    @ApiProperty({ example: "Lesson one", description: "Lesson text" })
     text: string;
 }
