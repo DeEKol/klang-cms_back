@@ -44,8 +44,6 @@ export class LessonApiController {
     async update(@Body() { id, text }: LessonUpdateRequest): Promise<boolean> {
         const command = new UpdateLessonCommand(id, text);
 
-        console.log(command);
-
         return this._lessonCrudUseCases.updateLesson(command);
     }
 

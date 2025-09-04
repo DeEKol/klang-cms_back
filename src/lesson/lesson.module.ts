@@ -2,9 +2,10 @@ import { Module } from "@nestjs/common";
 import { LessonApiModule } from "./modules/api/lesson-api.module";
 import { LessonPersistenceModule } from "./modules/persistence/lesson-persistence.module";
 import { PageApiModule } from "./modules/api/page-api.module";
+import { SectionApiModule } from "./modules/api/section-api.module";
 
 @Module({
-    imports: [LessonApiModule, LessonPersistenceModule, PageApiModule],
+    imports: [LessonPersistenceModule, LessonApiModule, PageApiModule, SectionApiModule],
     controllers: [],
     providers: [],
 })

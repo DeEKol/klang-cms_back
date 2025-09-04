@@ -3,22 +3,92 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { LessonOrmEntity } from "./lesson/lesson.orm-entity";
 import { LessonPageOrmEntity } from "./lesson-page/lesson-page.orm-entity";
-import { ILessonCrudPorts } from "../../domains/ports/out/i-lesson-crud.ports";
+import {
+    ILessonCrudPorts,
+    TSectionId,
+    TSectionText,
+} from "../../domains/ports/out/i-lesson-crud.ports";
+import { SectionOrmEntity } from "./section/section.orm-entity";
 
 @Injectable()
 export class LessonPersistenceAdapter implements ILessonCrudPorts {
     constructor(
+        @InjectRepository(SectionOrmEntity)
+        private readonly _sectionRepository: Repository<SectionOrmEntity>,
         @InjectRepository(LessonOrmEntity)
         private readonly _lessonRepository: Repository<LessonOrmEntity>,
         @InjectRepository(LessonPageOrmEntity)
         private readonly _lessonPageRepository: Repository<LessonPageOrmEntity>,
     ) {}
 
+    getSection(id: TSectionId): Promise<SectionOrmEntity | null> {
+        return this._sectionRepository.findOne({
+            where: { id: id },
+            relations: ["lessons"],
+        });
+    }
+
+    getSections(): Promise<SectionOrmEntity[] | []> {
+        return this._sectionRepository.find({
+            relations: ["lessons"],
+        });
+    }
+
+    async createSection(text: TSectionText): Promise<SectionOrmEntity | null> {
+        const sectionOrmEntity = new SectionOrmEntity();
+        sectionOrmEntity.text = text;
+
+        return await this._sectionRepository.save(sectionOrmEntity);
+    }
+
+    async updateSection(id: TSectionId, text?: TSectionText): Promise<boolean> {
+        const sectionOrmEntity = new SectionOrmEntity();
+        if (text) sectionOrmEntity.text = text;
+
+        const updatedSection = await this._sectionRepository.update({ id }, sectionOrmEntity);
+
+        return !!updatedSection.affected;
+    }
+
+    async deleteSection(id: TSectionId): Promise<boolean> {
+        const sectionOrmEntity = await this.getSection(id);
+
+        if (sectionOrmEntity) {
+            for (const lesson of sectionOrmEntity.lessons) {
+                if (lesson) await this._lessonPageRepository.remove(lesson.lessonPages);
+            }
+
+            await this._lessonRepository.remove(sectionOrmEntity?.lessons);
+
+            const removedSection = await this._sectionRepository.remove(sectionOrmEntity);
+
+            return !!removedSection;
+        }
+
+        return false;
+    }
+
     getLesson(id: string): Promise<LessonOrmEntity | null> {
         return this._lessonRepository.findOne({
             where: { id: id },
             relations: ["lessonPages"],
         });
+    }
+
+    async createLesson(text: string): Promise<LessonOrmEntity | null> {
+        const lessonOrmEntity = new LessonOrmEntity();
+        lessonOrmEntity.text = text;
+
+        return await this._lessonRepository.save(lessonOrmEntity);
+    }
+
+    async updateLesson(id: string, text?: string): Promise<boolean> {
+        const lessonOrmEntity = new LessonOrmEntity();
+        if (text) lessonOrmEntity.text = text;
+
+        const updatedLesson = await this._lessonRepository.update({ id }, lessonOrmEntity);
+
+        return !!updatedLesson.affected;
     }
 
     async deleteLesson(id: string): Promise<boolean> {
@@ -33,13 +103,6 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         }
 
         return false;
-    }
-
-    async createLesson(text: string): Promise<LessonOrmEntity | null> {
-        const lessonOrmEntity = new LessonOrmEntity();
-        lessonOrmEntity.text = text;
-
-        return await this._lessonRepository.save(lessonOrmEntity);
     }
 
     async createPage(
@@ -61,32 +124,6 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         return null;
     }
 
-    async deletePage(lessonId: string, pageNumber: number): Promise<boolean> {
-        const lessonOrmEntity = await this.getLesson(lessonId);
-
-        if (lessonOrmEntity) {
-            const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
-                lesson: lessonOrmEntity,
-                pageNumber: pageNumber,
-            });
-
-            const removedPage = await this._lessonPageRepository.remove(lessonPageOrmEntity);
-
-            return !!removedPage;
-        }
-
-        return false;
-    }
-
-    async updateLesson(id: string, text?: string): Promise<boolean> {
-        const lessonOrmEntity = new LessonOrmEntity();
-        if (text) lessonOrmEntity.text = text;
-
-        const updatedLesson = await this._lessonRepository.update({ id }, lessonOrmEntity);
-
-        return !!updatedLesson.affected;
-    }
-
     async updatePage(
         id: string,
         pageNumber?: number,
@@ -106,5 +143,22 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         const updatedPage = await this._lessonPageRepository.update({ id }, lessonPageOrmEntity);
 
         return !!updatedPage.affected;
+    }
+
+    async deletePage(lessonId: string, pageNumber: number): Promise<boolean> {
+        const lessonOrmEntity = await this.getLesson(lessonId);
+
+        if (lessonOrmEntity) {
+            const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
+                lesson: lessonOrmEntity,
+                pageNumber: pageNumber,
+            });
+
+            const removedPage = await this._lessonPageRepository.remove(lessonPageOrmEntity);
+
+            return !!removedPage;
+        }
+
+        return false;
     }
 }

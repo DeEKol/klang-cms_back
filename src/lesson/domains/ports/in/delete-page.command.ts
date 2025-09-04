@@ -1,4 +1,4 @@
-import { TLessonId, TPageNumber } from "./i-lesson.use-cases";
+import { TLessonId, TPageNumber } from "../out/i-lesson-crud.ports";
 
 export class DeletePageCommand {
     constructor(

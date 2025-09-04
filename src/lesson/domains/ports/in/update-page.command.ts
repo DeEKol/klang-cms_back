@@ -1,4 +1,4 @@
-import { TLessonId, TPageId, TPageNumber, TPageText } from "./i-lesson.use-cases";
+import { TLessonId, TPageId, TPageNumber, TPageText } from "../out/i-lesson-crud.ports";
 
 export class UpdatePageCommand {
     constructor(

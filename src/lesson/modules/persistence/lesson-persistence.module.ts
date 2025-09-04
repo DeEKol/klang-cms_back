@@ -5,10 +5,11 @@ import { LessonCrudService } from "../../domains/services/lesson-crud.service";
 import { LessonPersistenceAdapter } from "./lesson-persistence.adapter";
 import { LessonOrmEntity } from "./lesson/lesson.orm-entity";
 import { LessonPageOrmEntity } from "./lesson-page/lesson-page.orm-entity";
+import { SectionOrmEntity } from "./section/section.orm-entity";
 
 @Global()
 @Module({
-    imports: [TypeOrmModule.forFeature([LessonOrmEntity, LessonPageOrmEntity])],
+    imports: [TypeOrmModule.forFeature([LessonOrmEntity, LessonPageOrmEntity, SectionOrmEntity])],
     controllers: [],
     providers: [
         LessonPersistenceAdapter,

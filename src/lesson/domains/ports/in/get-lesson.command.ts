@@ -1,4 +1,4 @@
-import { TLessonId } from "./i-lesson.use-cases";
+import { TLessonId } from "../out/i-lesson-crud.ports";
 
 export class GetLessonCommand {
     constructor(private readonly _id: TLessonId) {}

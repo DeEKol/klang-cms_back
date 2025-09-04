@@ -1,4 +1,4 @@
-import { TLessonId, TLessonText } from "./i-lesson.use-cases";
+import { TLessonId, TLessonText } from "../out/i-lesson-crud.ports";
 
 export class UpdateLessonCommand {
     constructor(
