@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post } from "@nestjs/common";
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
 import { ILessonUseCases, SLessonCrudUseCases } from "../../domains/ports/in/i-lesson.use-cases";
 import { GetLessonCommand } from "../../domains/ports/in/get-lesson.command";
 import { DeleteLessonCommand } from "../../domains/ports/in/delete-lesson.command";
@@ -21,7 +21,11 @@ export class LessonApiController {
 
     @Get("find/:id")
     @ApiParam({ name: "id", type: "string" })
-    @ApiResponse({ status: 200, description: "Get one", type: LessonResponse })
+    @ApiResponse({
+        status: 200,
+        description: "Get one",
+        schema: { anyOf: [{ $ref: getSchemaPath(LessonResponse) }, { type: "null" }] },
+    })
     async findOne(@Param() { id }: LessonFindRequest): Promise<LessonResponse | null> {
         const command = new GetLessonCommand(id);
         const lessonEntity = await this._lessonCrudUseCases.getLesson(command);

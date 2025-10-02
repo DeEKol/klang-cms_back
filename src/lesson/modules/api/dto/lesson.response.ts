@@ -9,7 +9,8 @@ export class LessonResponse {
     @ApiProperty({ example: "Lesson one" })
     text: string;
 
-    pages: { id: string; text: string }[];
+    @ApiProperty({ type: [PageResponse] })
+    pages: PageResponse[];
 
     constructor(id: string, text: string, pages: PageResponse[]) {
         this.id = id;
