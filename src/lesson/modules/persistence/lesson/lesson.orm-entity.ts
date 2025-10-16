@@ -7,11 +7,13 @@ import {
     OneToMany,
     ManyToOne,
     JoinColumn,
+    Index,
 } from "typeorm";
-import { LessonPageOrmEntity } from "../lesson-page/lesson-page.orm-entity";
+import { PageOrmEntity } from "../lesson-page/page.orm-entity";
 import { SectionOrmEntity } from "../section/section.orm-entity";
 
-@Entity()
+@Entity({ name: "lesson" })
+@Index(["section", "order"], { unique: true })
 export class LessonOrmEntity {
     // * Внутренний технический идентификатор (только для БД)
     @PrimaryGeneratedColumn("increment", { name: "id_pk" })
@@ -28,8 +30,13 @@ export class LessonOrmEntity {
     @Column()
     text: string;
 
-    @OneToMany(() => LessonPageOrmEntity, (lessonOrmPage) => lessonOrmPage.lesson)
-    lessonPages: LessonPageOrmEntity[];
+    @Column({
+        nullable: false,
+    })
+    order: number;
+
+    @OneToMany(() => PageOrmEntity, (lessonOrmPage) => lessonOrmPage.lesson)
+    pages: PageOrmEntity[];
 
     @ManyToOne(() => SectionOrmEntity, (sectionOrmEntity) => sectionOrmEntity.lessons)
     @JoinColumn({ name: "section_id" })

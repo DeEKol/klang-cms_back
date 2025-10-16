@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { LessonPageEntity } from "../../../domains/entities/lesson-page.entity";
+import { PageEntity } from "../../../domains/entities/page.entity";
 
 export class PageResponse {
     // TODO: проверка на uuid
@@ -18,9 +18,9 @@ export class PageResponse {
         this.pageNumber = pageNumber;
     }
 
-    static mapToResponse(lessonEntity: LessonPageEntity | null): PageResponse | null {
+    static mapToResponse(lessonEntity: PageEntity | null): PageResponse | null {
         if (lessonEntity)
-            return new PageResponse(lessonEntity.id, lessonEntity.text, lessonEntity.pageNumber);
+            return new PageResponse(lessonEntity.id, lessonEntity.text, lessonEntity.order);
         else return null;
     }
 }

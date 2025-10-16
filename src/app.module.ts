@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
+import DataSource from "./data-source";
 import { LessonModule } from "./lesson/lesson.module";
 
 @Module({
@@ -9,12 +10,7 @@ import { LessonModule } from "./lesson/lesson.module";
             isGlobal: true,
             envFilePath: ["./.env"],
         }),
-        TypeOrmModule.forRoot({
-            type: "sqlite",
-            database: "database.sqlite",
-            entities: [__dirname + "/**/*.orm-entity{.ts,.js}"],
-            synchronize: true, // ! Только для разработки — не использовать в проде
-        }),
+        TypeOrmModule.forRoot(DataSource.options),
         LessonModule,
     ],
     controllers: [],

@@ -1,5 +1,5 @@
 import { LessonOrmEntity } from "../../../modules/persistence/lesson/lesson.orm-entity";
-import { LessonPageOrmEntity } from "../../../modules/persistence/lesson-page/lesson-page.orm-entity";
+import { PageOrmEntity } from "../../../modules/persistence/lesson-page/page.orm-entity";
 import { SectionOrmEntity } from "../../../modules/persistence/section/section.orm-entity";
 
 export type TSectionId = string;
@@ -22,11 +22,7 @@ export interface ILessonCrudPorts {
     updateLesson(id: TLessonId, text?: TLessonText): Promise<boolean>;
     deleteLesson(id: TLessonId): Promise<boolean>;
 
-    createPage(
-        text: string,
-        pageNumber: number,
-        lessonId: string,
-    ): Promise<LessonPageOrmEntity | null>;
+    createPage(text: string, pageNumber: number, lessonId: string): Promise<PageOrmEntity | null>;
     deletePage(id: TLessonId, pageNumber: TPageNumber): Promise<boolean>;
     updatePage(
         id: TPageId,

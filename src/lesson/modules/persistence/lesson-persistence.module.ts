@@ -4,12 +4,12 @@ import { SLessonCrudUseCases } from "../../domains/ports/in/i-lesson.use-cases";
 import { LessonCrudService } from "../../domains/services/lesson-crud.service";
 import { LessonPersistenceAdapter } from "./lesson-persistence.adapter";
 import { LessonOrmEntity } from "./lesson/lesson.orm-entity";
-import { LessonPageOrmEntity } from "./lesson-page/lesson-page.orm-entity";
+import { PageOrmEntity } from "./lesson-page/page.orm-entity";
 import { SectionOrmEntity } from "./section/section.orm-entity";
 
 @Global()
 @Module({
-    imports: [TypeOrmModule.forFeature([LessonOrmEntity, LessonPageOrmEntity, SectionOrmEntity])],
+    imports: [TypeOrmModule.forFeature([LessonOrmEntity, PageOrmEntity, SectionOrmEntity])],
     controllers: [],
     providers: [
         LessonPersistenceAdapter,

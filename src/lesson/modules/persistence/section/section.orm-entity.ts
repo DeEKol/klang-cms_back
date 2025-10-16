@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from "typeorm";
 import { LessonOrmEntity } from "../lesson/lesson.orm-entity";
 
-@Entity()
+@Entity({ name: "section" })
 export class SectionOrmEntity {
     // * Внутренний технический идентификатор (только для БД)
     @PrimaryGeneratedColumn("increment", { name: "id_pk" })
@@ -18,6 +18,12 @@ export class SectionOrmEntity {
 
     @Column()
     text: string;
+
+    @Column({
+        nullable: false,
+        unique: true,
+    })
+    order: number;
 
     @OneToMany(() => LessonOrmEntity, (sectionOrmPage) => sectionOrmPage.section)
     lessons: LessonOrmEntity[];

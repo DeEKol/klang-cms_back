@@ -1,18 +1,19 @@
-import { LessonPageEntity } from "./lesson-page.entity";
+import { PageEntity } from "./page.entity";
 import { LessonOrmEntity } from "../../modules/persistence/lesson/lesson.orm-entity";
 
 export class LessonEntity {
     constructor(
         private readonly _id: string,
-        private readonly _pages: LessonPageEntity[],
         private readonly _text: string,
+        private readonly _number: number,
+        private readonly _pages: PageEntity[],
     ) {}
 
     get id(): string {
         return this._id;
     }
 
-    get pages(): LessonPageEntity[] {
+    get pages(): PageEntity[] {
         // * lesson-page[]
         return this._pages;
     }
@@ -21,16 +22,25 @@ export class LessonEntity {
         return this._text;
     }
 
+    get order(): number {
+        return this._number;
+    }
+
     static mapToDomain(lessonOrmEntity: LessonOrmEntity | null): LessonEntity | null {
-        const lessonPageArray = lessonOrmEntity?.lessonPages?.reduce((acc, lessonPage) => {
-            const lessonPageEntity = LessonPageEntity.mapToDomain(lessonPage);
-            if (lessonPageEntity) acc.push(lessonPageEntity);
+        const lessonPageArray = lessonOrmEntity?.pages?.reduce((acc, page) => {
+            const pageEntity = PageEntity.mapToDomain(page);
+            if (pageEntity) acc.push(pageEntity);
 
             return acc;
-        }, [] as LessonPageEntity[]);
+        }, [] as PageEntity[]);
 
-        if (lessonOrmEntity && lessonPageArray)
-            return new LessonEntity(lessonOrmEntity.id, lessonPageArray, lessonOrmEntity.text);
+        if (lessonOrmEntity)
+            return new LessonEntity(
+                lessonOrmEntity.id,
+                lessonOrmEntity.text,
+                lessonOrmEntity.order,
+                lessonPageArray ?? [],
+            );
         else return null;
     }
 }

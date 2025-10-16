@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { LessonOrmEntity } from "./lesson/lesson.orm-entity";
-import { LessonPageOrmEntity } from "./lesson-page/lesson-page.orm-entity";
+import { PageOrmEntity } from "./lesson-page/page.orm-entity";
 import {
     ILessonCrudPorts,
     TSectionId,
@@ -17,8 +17,8 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         private readonly _sectionRepository: Repository<SectionOrmEntity>,
         @InjectRepository(LessonOrmEntity)
         private readonly _lessonRepository: Repository<LessonOrmEntity>,
-        @InjectRepository(LessonPageOrmEntity)
-        private readonly _lessonPageRepository: Repository<LessonPageOrmEntity>,
+        @InjectRepository(PageOrmEntity)
+        private readonly _lessonPageRepository: Repository<PageOrmEntity>,
     ) {}
 
     getSection(id: TSectionId): Promise<SectionOrmEntity | null> {
@@ -55,7 +55,7 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
 
         if (sectionOrmEntity) {
             for (const lesson of sectionOrmEntity.lessons) {
-                if (lesson) await this._lessonPageRepository.remove(lesson.lessonPages);
+                if (lesson) await this._lessonPageRepository.remove(lesson.pages);
             }
 
             await this._lessonRepository.remove(sectionOrmEntity?.lessons);
@@ -95,7 +95,7 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         const lessonOrmEntity = await this.getLesson(id);
 
         if (lessonOrmEntity) {
-            await this._lessonPageRepository.remove(lessonOrmEntity?.lessonPages);
+            await this._lessonPageRepository.remove(lessonOrmEntity?.pages);
 
             const removedLesson = await this._lessonRepository.remove(lessonOrmEntity);
 
@@ -109,13 +109,13 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         text: string,
         pageNumber: number,
         lessonId: string,
-    ): Promise<LessonPageOrmEntity | null> {
+    ): Promise<PageOrmEntity | null> {
         const lessonOrmEntity = await this.getLesson(lessonId);
 
         if (lessonOrmEntity) {
-            const lessonPageOrmEntity = new LessonPageOrmEntity();
+            const lessonPageOrmEntity = new PageOrmEntity();
             lessonPageOrmEntity.text = text;
-            lessonPageOrmEntity.pageNumber = pageNumber;
+            lessonPageOrmEntity.order = pageNumber;
             lessonPageOrmEntity.lesson = lessonOrmEntity;
 
             return await this._lessonPageRepository.save(lessonPageOrmEntity);
@@ -130,8 +130,8 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         text?: string,
         lessonId?: string,
     ): Promise<boolean> {
-        const lessonPageOrmEntity = new LessonPageOrmEntity();
-        if (pageNumber) lessonPageOrmEntity.pageNumber = pageNumber;
+        const lessonPageOrmEntity = new PageOrmEntity();
+        if (pageNumber) lessonPageOrmEntity.order = pageNumber;
         if (text) lessonPageOrmEntity.text = text;
 
         if (lessonId) {
@@ -151,7 +151,7 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         if (lessonOrmEntity) {
             const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
                 lesson: lessonOrmEntity,
-                pageNumber: pageNumber,
+                order: pageNumber,
             });
 
             const removedPage = await this._lessonPageRepository.remove(lessonPageOrmEntity);

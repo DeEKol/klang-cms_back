@@ -1,4 +1,4 @@
-import { LessonPageEntity } from "../entities/lesson-page.entity";
+import { PageEntity } from "../entities/page.entity";
 import { LessonEntity } from "../entities/lesson.entity";
 import { SectionEntity } from "../entities/section.entity";
 import { ILessonUseCases } from "../ports/in/i-lesson.use-cases";
@@ -72,14 +72,14 @@ export class LessonCrudService implements ILessonUseCases {
         return this._lessonCrudPorts.deleteLesson(command.id);
     }
 
-    async createPage(command: CreatePageCommand): Promise<LessonPageEntity | null> {
+    async createPage(command: CreatePageCommand): Promise<PageEntity | null> {
         const lessonPageOrmEntity = await this._lessonCrudPorts.createPage(
             command.text,
             command.pageNumber,
             command.lessonId,
         );
 
-        return LessonPageEntity.mapToDomain(lessonPageOrmEntity);
+        return PageEntity.mapToDomain(lessonPageOrmEntity);
     }
 
     updatePage(command: UpdatePageCommand): Promise<boolean> {

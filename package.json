@@ -6,7 +6,12 @@
     "build:dev": "tsc --watch",
     "start:dev": "node --watch dist/main.js",
     "build:prod": "tsc",
-    "start:prod": "node dist/main.js"
+    "start:prod": "node dist/main.js",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js -d src/data-source.ts",
+    "migration:generate": "npm run typeorm migration:generate",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:revert": "npm run typeorm migration:revert",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:create"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +26,7 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "prettier": "3.3.3",
+    "ts-node": "10.9.2",
     "typescript": "5.6.3"
   },
   "dependencies": {

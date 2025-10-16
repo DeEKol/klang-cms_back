@@ -19,6 +19,14 @@ export class SectionApiController {
         private readonly _lessonCrudUseCases: ILessonUseCases,
     ) {}
 
+    @Get("find-all")
+    @ApiResponse({ status: 200, description: "Get all", type: [SectionResponse] })
+    async findAll() {
+        const sectionEntities = await this._lessonCrudUseCases.getSections();
+
+        return sectionEntities.map((sectionEntity) => SectionResponse.mapToResponse(sectionEntity));
+    }
+
     @Get("find/:id")
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, description: "Get one", type: SectionResponse })

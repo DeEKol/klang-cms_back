@@ -1,5 +1,5 @@
 import { LessonEntity } from "../../entities/lesson.entity";
-import { LessonPageEntity } from "../../entities/lesson-page.entity";
+import { PageEntity } from "../../entities/page.entity";
 import { SectionEntity } from "../../entities/section.entity";
 import { GetLessonCommand } from "./get-lesson.command";
 import { DeleteLessonCommand } from "./delete-lesson.command";
@@ -27,7 +27,7 @@ export interface ILessonUseCases {
     updateLesson(command: UpdateLessonCommand): Promise<boolean>;
     deleteLesson(command: DeleteLessonCommand): Promise<boolean>;
 
-    createPage(command: CreatePageCommand): Promise<LessonPageEntity | null>;
+    createPage(command: CreatePageCommand): Promise<PageEntity | null>;
     deletePage(command: DeletePageCommand): Promise<boolean>;
     updatePage(command: UpdatePageCommand): Promise<boolean>;
 }

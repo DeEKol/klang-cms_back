@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { LessonEntity } from "../../../domains/entities/lesson.entity";
-import { PageResponse } from "./page.response";
 
 export class LessonResponse {
     @ApiProperty({ example: "48709c63-458e-4f90-8c39-577416a790f2" })
@@ -9,28 +8,13 @@ export class LessonResponse {
     @ApiProperty({ example: "Lesson one" })
     text: string;
 
-    @ApiProperty({ type: [PageResponse] })
-    pages: PageResponse[];
-
-    constructor(id: string, text: string, pages: PageResponse[]) {
+    constructor(id: string, text: string) {
         this.id = id;
         this.text = text;
-        this.pages = pages;
     }
 
     static mapToResponse(lessonEntity: LessonEntity | null): LessonResponse | null {
-        if (lessonEntity)
-            return new LessonResponse(
-                lessonEntity.id,
-                lessonEntity.text,
-                lessonEntity.pages.reduce((acc, elem) => {
-                    const page = PageResponse.mapToResponse(elem);
-
-                    if (page) acc.push(page);
-
-                    return acc;
-                }, [] as PageResponse[]),
-            );
+        if (lessonEntity) return new LessonResponse(lessonEntity.id, lessonEntity.text);
         else return null;
     }
 }

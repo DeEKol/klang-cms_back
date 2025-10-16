@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SectionEntity } from "../../../domains/entities/section.entity";
+import { LessonResponse } from "./lesson.response";
 
 export class SectionResponse {
     // TODO: проверка на uuid
@@ -9,13 +10,28 @@ export class SectionResponse {
     @ApiProperty({ example: "Section one", description: "Section text" })
     text: string;
 
-    constructor(id: string, text: string) {
+    @ApiProperty({ type: [LessonResponse] })
+    lessons: LessonResponse[];
+
+    constructor(id: string, text: string, lessons: LessonResponse[]) {
         this.id = id;
         this.text = text;
+        this.lessons = lessons;
     }
 
     static mapToResponse(sectionEntity: SectionEntity | null): SectionResponse | null {
-        if (sectionEntity) return new SectionResponse(sectionEntity.id, sectionEntity.text);
+        if (sectionEntity)
+            return new SectionResponse(
+                sectionEntity.id,
+                sectionEntity.text,
+                sectionEntity.lessons.reduce((acc, elem) => {
+                    const lesson = LessonResponse.mapToResponse(elem);
+
+                    if (lesson) acc.push(lesson);
+
+                    return acc;
+                }, [] as LessonResponse[]),
+            );
         else return null;
     }
 }
