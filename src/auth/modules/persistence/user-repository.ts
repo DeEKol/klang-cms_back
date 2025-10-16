@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserEntity } from "../entities/user..orm-entity";
+import { UserOrmEntity } from "./user/user.orm-entity";
 
 @Injectable()
-export class AuthRepository {
+export class UserRepository {
     constructor(
-        @InjectRepository(UserEntity)
-        private repo: Repository<UserEntity>,
+        @InjectRepository(UserOrmEntity)
+        private repo: Repository<UserOrmEntity>,
     ) {}
 
     async findByUid(uid: string) {
@@ -18,13 +18,15 @@ export class AuthRepository {
         return this.repo.findOne({ where: { email } });
     }
 
-    async createOrUpdateFromFirebase(uid: string, payload: Partial<UserEntity>) {
+    async createOrUpdateFromFirebase(uid: string, payload: Partial<UserOrmEntity>) {
         let user = await this.findByUid(uid);
+
         if (!user) {
             user = this.repo.create({ uid, ...payload });
         } else {
             Object.assign(user, payload);
         }
+
         return this.repo.save(user);
     }
 }

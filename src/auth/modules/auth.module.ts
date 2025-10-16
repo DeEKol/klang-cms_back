@@ -1,23 +1,10 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
-import { UserEntity } from "../entities/user..orm-entity";
-import { AuthApiController } from "./api/auth-api.controller";
-import { AuthService } from "../services/auth.service";
-import { AuthRepository } from "../persistence/auth.repository";
+import { AuthApiModule } from "./api/auth-api.module";
+import { UserPersistenceModule } from "./persistence/user-persistance.module";
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UserEntity]),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET || "dev-secret", // use env
-            signOptions: {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-            } as JwtModuleOptions["signOptions"],
-        }),
-    ],
-    controllers: [AuthApiController],
-    providers: [AuthService, AuthRepository],
-    exports: [AuthService],
+    imports: [UserPersistenceModule, AuthApiModule],
+    controllers: [],
+    exports: [],
 })
 export class AuthModule {}

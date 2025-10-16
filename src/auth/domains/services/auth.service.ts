@@ -1,9 +1,12 @@
 import { Injectable, UnauthorizedException, Logger } from "@nestjs/common";
 import { JwtService, JwtSignOptions } from "@nestjs/jwt";
-import { getFirebaseAdmin } from "../../firebase/admin";
-import { AuthRepository } from "../persistence/auth.repository";
-import { UserEntity } from "../entities/user..orm-entity";
 import { randomBytes } from "crypto";
+
+import { getFirebaseAdmin } from "../../../firebase/admin";
+import { UserRepository } from "../../modules/persistence/user-repository";
+import { UserOrmEntity } from "../../modules/persistence/user/user.orm-entity";
+
+import type { TDecodedIdToken } from "../../../firebase/admin";
 
 @Injectable()
 export class AuthService {
@@ -11,13 +14,13 @@ export class AuthService {
     private admin = getFirebaseAdmin();
 
     constructor(
-        private readonly authRepo: AuthRepository,
+        private readonly userRepo: UserRepository,
         private readonly jwtService: JwtService,
     ) {}
 
     async handleFirebaseSignIn(idToken: string) {
         // 1) verify firebase idToken
-        let decodedToken: any;
+        let decodedToken: TDecodedIdToken | null = null;
         console.log("idToken, idToken", idToken);
 
         try {
@@ -27,14 +30,14 @@ export class AuthService {
             throw new UnauthorizedException("Invalid Firebase token");
         }
 
-        const { uid, email, name, picture, firebase } = decodedToken as any;
+        const { uid, email, name, picture, firebase } = decodedToken;
 
         // 2) create or update user in own DB
-        const user = await this.authRepo.createOrUpdateFromFirebase(uid, {
-            email: email ?? null,
-            displayName: name ?? null,
-            photoURL: picture ?? null,
-            provider: (firebase && firebase.sign_in_provider) || null,
+        const user = await this.userRepo.createOrUpdateFromFirebase(uid, {
+            email: email,
+            displayName: name ?? "",
+            photoURL: picture,
+            provider: firebase && firebase.sign_in_provider,
             meta: decodedToken,
         });
 
@@ -44,7 +47,7 @@ export class AuthService {
         return { user, ...tokens };
     }
 
-    private async issueTokens(user: UserEntity) {
+    private async issueTokens(user: UserOrmEntity) {
         const payload = { sub: user.id, uid: user.uid, email: user.email };
         const accessToken = await this.jwtService.signAsync(payload, {
             expiresIn: process.env.JWT_EXPIRES_IN,

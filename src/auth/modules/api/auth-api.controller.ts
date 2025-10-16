@@ -1,23 +1,22 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { FirebaseAuthDto } from "./dto/firebase-auth.dto";
-import { AuthService } from "../../services/auth.service";
+import { ApiBody, ApiParam, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import { AuthService } from "../../domains/services/auth.service";
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthApiController {
     constructor(private readonly authService: AuthService) {}
 
     @Post("firebase")
     async signInWithFirebase(@Body() dto: FirebaseAuthDto) {
-        const authEntity = await this.authService.handleFirebaseSignIn(dto.idToken);
-        // result: { user, accessToken, refreshToken, expiresIn }
-
-        // console.log("authEntity", authEntity);
+        const authData = await this.authService.handleFirebaseSignIn(dto.idToken);
 
         // * AuthResponse.mapToResponse(authEntity)
         return {
-            accessToken: authEntity.accessToken,
-            // refreshToken: authEntity.refreshToken,
-            // expiresIn: authEntity.expiresIn,
+            accessToken: authData.accessToken,
+            refreshToken: authData.refreshToken,
+            expiresIn: authData.expiresIn,
             // user: {
             //     id: authEntity.user.id,
             //     uid: authEntity.user.uid,
