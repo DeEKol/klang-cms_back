@@ -71,7 +71,7 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
     getLesson(id: string): Promise<LessonOrmEntity | null> {
         return this._lessonRepository.findOne({
             where: { id: id },
-            relations: ["lessonPages"],
+            relations: ["pages"],
         });
     }
 
