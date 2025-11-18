@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build:dev": "tsc --watch",
-    "start:dev": "node --watch dist/main.js",
+    "start:dev": "ts-node src/main.ts",
     "build:prod": "tsc",
     "start:prod": "node dist/main.js",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js -d src/data-source.ts",

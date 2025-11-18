@@ -19,7 +19,7 @@ export class LessonApiController {
         private readonly _lessonCrudUseCases: ILessonUseCases,
     ) {}
 
-    @Get("find/:id")
+    @Get("get/:id")
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({
         status: 200,
