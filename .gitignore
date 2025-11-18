@@ -16,3 +16,5 @@
 
 #DB
 database.sqlite
+
+service-account.json
