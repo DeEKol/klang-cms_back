@@ -1,4 +1,4 @@
-import { TSectionText } from "../out/i-lesson-crud.ports";
+import { TSectionText } from "../out/i-lesson-crud.port";
 
 export class CreateSectionCommand {
     constructor(private readonly _text: TSectionText) {}

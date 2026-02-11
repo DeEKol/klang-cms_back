@@ -1,4 +1,4 @@
-import { TSectionId, TSectionText } from "../out/i-lesson-crud.ports";
+import { TSectionId, TSectionText } from "../out/i-lesson-crud.port";
 
 export class UpdateSectionCommand {
     constructor(

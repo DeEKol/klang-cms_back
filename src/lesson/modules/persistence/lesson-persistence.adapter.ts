@@ -7,7 +7,7 @@ import {
     ILessonCrudPorts,
     TSectionId,
     TSectionText,
-} from "../../domains/ports/out/i-lesson-crud.ports";
+} from "../../domains/ports/out/i-lesson-crud.port";
 import { SectionOrmEntity } from "./section/section.orm-entity";
 
 @Injectable()

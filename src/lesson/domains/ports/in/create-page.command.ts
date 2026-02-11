@@ -1,4 +1,4 @@
-import { TLessonId, TPageNumber, TPageText } from "../out/i-lesson-crud.ports";
+import { TLessonId, TPageNumber, TPageText } from "../out/i-lesson-crud.port";
 
 export class CreatePageCommand {
     constructor(
