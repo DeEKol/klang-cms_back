@@ -1,0 +1,12 @@
+import { Global, Module } from "@nestjs/common";
+
+@Global()
+@Module({
+    imports: [],
+    controllers: [],
+    providers: [
+        // CLAUDE: register persistence adapters/providers here
+    ],
+    exports: [],
+})
+export class {{pascalCase module}}PersistenceModule {}
