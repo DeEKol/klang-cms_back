@@ -1,0 +1,18 @@
+import { {{pascalCase entity}}OrmEntity } from "../../../modules/persistence/{{entity}}/{{entity}}.orm-entity";
+
+export type T{{pascalCase entity}}Id = string;
+{{#each fields}}
+export type T{{pascalCase entity}}{{pascalCase this.name}} = {{this.type}};
+{{/each}}
+
+export interface I{{pascalCase entity}}RepositoryPort {
+    findById(id: T{{pascalCase entity}}Id): Promise<{{pascalCase entity}}OrmEntity | null>;
+    create(
+{{#each fields}}        {{this.name}}: T{{pascalCase entity}}{{pascalCase this.name}},
+{{/each}}    ): Promise<{{pascalCase entity}}OrmEntity | null>;
+    update(
+        id: T{{pascalCase entity}}Id,
+{{#each fields}}        {{this.name}}?: T{{pascalCase entity}}{{pascalCase this.name}},
+{{/each}}    ): Promise<boolean>;
+    delete(id: T{{pascalCase entity}}Id): Promise<boolean>;
+}

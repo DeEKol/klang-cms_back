@@ -1,0 +1,46 @@
+import { Injectable } from "@nestjs/common";
+import { {{pascalCase entity}}Entity } from "../entities/{{entity}}.entity";
+import { I{{pascalCase entity}}UseCases } from "../ports/in/i-{{entity}}.use-cases";
+import { Get{{pascalCase entity}}Command } from "../ports/in/get-{{entity}}.command";
+import { Delete{{pascalCase entity}}Command } from "../ports/in/delete-{{entity}}.command";
+import { Create{{pascalCase entity}}Command } from "../ports/in/create-{{entity}}.command";
+import { Update{{pascalCase entity}}Command } from "../ports/in/update-{{entity}}.command";
+import { I{{pascalCase entity}}RepositoryPort } from "../ports/out/i-{{entity}}-repository.port";
+
+@Injectable()
+export class {{pascalCase entity}}CrudService implements I{{pascalCase entity}}UseCases {
+    constructor(private readonly _{{entity}}Repository: I{{pascalCase entity}}RepositoryPort) {}
+
+    async get{{pascalCase entity}}(
+        command: Get{{pascalCase entity}}Command,
+    ): Promise<{{pascalCase entity}}Entity | null> {
+        const ormEntity = await this._{{entity}}Repository.findById(command.id);
+
+        return {{pascalCase entity}}Entity.mapToDomain(ormEntity);
+    }
+
+    async create{{pascalCase entity}}(
+        command: Create{{pascalCase entity}}Command,
+    ): Promise<{{pascalCase entity}}Entity | null> {
+        const ormEntity = await this._{{entity}}Repository.create(
+{{#each fields}}            command.{{this.name}},
+{{/each}}        );
+
+        return {{pascalCase entity}}Entity.mapToDomain(ormEntity);
+    }
+
+    async update{{pascalCase entity}}(
+        command: Update{{pascalCase entity}}Command,
+    ): Promise<boolean> {
+        return this._{{entity}}Repository.update(
+            command.id,
+{{#each fields}}            command.{{this.name}},
+{{/each}}        );
+    }
+
+    async delete{{pascalCase entity}}(
+        command: Delete{{pascalCase entity}}Command,
+    ): Promise<boolean> {
+        return this._{{entity}}Repository.delete(command.id);
+    }
+}

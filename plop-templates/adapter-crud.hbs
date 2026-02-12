@@ -1,0 +1,29 @@
+import { I{{pascalCase entity}}RepositoryPort } from "../../domains/ports/out/i-{{entity}}-repository.port";
+import { {{pascalCase entity}}OrmEntity } from "./{{entity}}/{{entity}}.orm-entity";
+
+export class {{pascalCase entity}}RepositoryAdapter implements I{{pascalCase entity}}RepositoryPort {
+    async findById(id: string): Promise<{{pascalCase entity}}OrmEntity | null> {
+        // CLAUDE: implement DB lookup using TypeORM repository
+        throw new Error("Method not implemented.");
+    }
+
+    async create(
+{{#each fields}}        {{this.name}}: {{this.type}},
+{{/each}}    ): Promise<{{pascalCase entity}}OrmEntity | null> {
+        // CLAUDE: implement entity creation using TypeORM repository
+        throw new Error("Method not implemented.");
+    }
+
+    async update(
+        id: string,
+{{#each fields}}        {{this.name}}?: {{this.type}},
+{{/each}}    ): Promise<boolean> {
+        // CLAUDE: implement entity update using TypeORM repository
+        throw new Error("Method not implemented.");
+    }
+
+    async delete(id: string): Promise<boolean> {
+        // CLAUDE: implement entity deletion using TypeORM repository
+        throw new Error("Method not implemented.");
+    }
+}

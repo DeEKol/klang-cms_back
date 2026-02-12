@@ -1,0 +1,14 @@
+import { {{pascalCase entity}}Entity } from "../../entities/{{entity}}.entity";
+import { Get{{pascalCase entity}}Command } from "./get-{{entity}}.command";
+import { Delete{{pascalCase entity}}Command } from "./delete-{{entity}}.command";
+import { Create{{pascalCase entity}}Command } from "./create-{{entity}}.command";
+import { Update{{pascalCase entity}}Command } from "./update-{{entity}}.command";
+
+export const S{{pascalCase entity}}UseCases = Symbol("{{pascalCase entity}}UseCases");
+
+export interface I{{pascalCase entity}}UseCases {
+    get{{pascalCase entity}}(command: Get{{pascalCase entity}}Command): Promise<{{pascalCase entity}}Entity | null>;
+    create{{pascalCase entity}}(command: Create{{pascalCase entity}}Command): Promise<{{pascalCase entity}}Entity | null>;
+    update{{pascalCase entity}}(command: Update{{pascalCase entity}}Command): Promise<boolean>;
+    delete{{pascalCase entity}}(command: Delete{{pascalCase entity}}Command): Promise<boolean>;
+}

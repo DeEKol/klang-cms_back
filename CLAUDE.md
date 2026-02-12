@@ -57,26 +57,50 @@ npm run gen:entity
 
 ### What Plop Generates
 
-When running `npm run gen:entity`:
-1. Domain entity (`domains/entities/{entity}.entity.ts`)
-2. Repository port interface (`domains/ports/out/i-{entity}-repository.port.ts`)
-3. Domain service/use case (`domains/services/update-{entity}.service.ts`)
-4. DTO (`modules/api/dto/{entity}.dto.ts`)
-5. ORM entity (`modules/persistence/{entity}/{entity}.orm-entity.ts`)
-6. Repository adapter (`modules/persistence/{entity}-repository.adapter.ts`)
-7. Controller (`modules/api/{entity}.controller.ts`)
-8. Test skeleton (`tests/{entity}.spec.ts`)
-9. Creates or updates persistence module
+When running `npm run gen:entity`, it generates **18 files** for a complete CRUD module:
+
+#### Domain Layer (8 files)
+1. Domain entity with `mapToDomain()` (`domains/entities/{entity}.entity.ts`)
+2. Create command (`domains/ports/in/create-{entity}.command.ts`)
+3. Update command (`domains/ports/in/update-{entity}.command.ts`)
+4. Delete command (`domains/ports/in/delete-{entity}.command.ts`)
+5. Get command (`domains/ports/in/get-{entity}.command.ts`)
+6. Use-cases interface with Symbol for DI (`domains/ports/in/i-{entity}.use-cases.ts`)
+7. Repository port interface (`domains/ports/out/i-{entity}-repository.port.ts`)
+8. CRUD service (`domains/services/{entity}-crud.service.ts`)
+
+#### API Layer (6 files)
+9. Create request DTO (`modules/api/dto/{entity}.request.ts`)
+10. Update request DTO (`modules/api/dto/{entity}-update.request.ts`)
+11. Delete request DTO (`modules/api/dto/{entity}-delete.request.ts`)
+12. Find request DTO (`modules/api/dto/{entity}-find.request.ts`)
+13. Response DTO with `mapToResponse()` (`modules/api/dto/{entity}.response.ts`)
+14. CRUD controller with 4 endpoints (`modules/api/{entity}.controller.ts`)
+
+#### Persistence Layer (2 files)
+15. ORM entity (`modules/persistence/{entity}/{entity}.orm-entity.ts`)
+16. Repository adapter (`modules/persistence/{entity}-repository.adapter.ts`)
+
+#### Tests (1 file)
+17. Test skeleton (`tests/{entity}.spec.ts`)
+
+#### Module Update
+18. Creates or updates persistence module with provider registration comment
 
 ### Important Notes on Code Generation
 
 - Plop uses Handlebars templates from `plop-templates/`
 - Generated files include `// CLAUDE:` comments marking areas needing implementation
+- The generator creates a **complete CRUD scaffold** similar to the lesson module
 - After generation, manually:
-  - Register providers in persistence module
-  - Register controllers in API module
-  - Implement business logic in services
-  - Add TypeORM decorators to ORM entities
+  1. **Add TypeORM decorators** to ORM entity (`@Entity`, `@Column`, `@PrimaryGeneratedColumn`)
+  2. **Register repository adapter** in persistence module providers
+  3. **Register CRUD service** in persistence module (provide Symbol, export Symbol)
+  4. **Register controller** in API module controllers array
+  5. **Add class-validator decorators** to DTOs (`@IsString`, `@IsEmail`, etc.)
+  6. **Implement additional business logic** in service if needed beyond basic CRUD
+
+See [PLOP_TEMPLATES_GUIDE.md](PLOP_TEMPLATES_GUIDE.md) for detailed template documentation.
 
 ## Naming Conventions (from CONTRIBUTING.arch.md)
 

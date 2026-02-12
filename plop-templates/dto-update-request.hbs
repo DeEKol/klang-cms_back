@@ -1,0 +1,10 @@
+import { ApiProperty } from "@nestjs/swagger";
+
+export class {{pascalCase entity}}UpdateRequest {
+    @ApiProperty({ example: "48709c63-458e-4f90-8c39-577416a790f2", description: "ID" })
+    id: string;
+{{#each fields}}
+    @ApiProperty({ example: "{{#if (eq this.type "string")}}Example {{this.name}}{{else}}{{#if (eq this.type "number")}}1{{else}}{{#if (eq this.type "boolean")}}true{{else}}null{{/if}}{{/if}}{{/if}}", description: "{{pascalCase this.name}}", required: false })
+    {{this.name}}?: {{this.type}};
+{{/each}}
+}

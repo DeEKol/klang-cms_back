@@ -1,0 +1,15 @@
+export class Update{{pascalCase entity}}Command {
+    constructor(
+        private readonly _id: string,
+{{#each fields}}        private readonly _{{this.name}}?: {{this.type}},
+{{/each}}    ) {}
+
+    get id(): string {
+        return this._id;
+    }
+{{#each fields}}
+    get {{this.name}}(): {{this.type}} | undefined {
+        return this._{{this.name}};
+    }
+{{/each}}
+}

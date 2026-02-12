@@ -60,7 +60,7 @@ export default function (plop) {
                 {
                     type: "add",
                     path: `${base}/modules/api/${m}-api.module.ts`,
-                    templateFile: "plop-templates/module-api.module.ts.hbs",
+                    templateFile: "plop-templates/module-api.hbs",
                 },
                 {
                     type: "add",
@@ -69,17 +69,27 @@ export default function (plop) {
                 },
                 {
                     type: "add",
+                    path: `${base}/modules/persistence/${m}-persistence.module.ts`,
+                    templateFile: "plop-templates/persistence-module.hbs",
+                },
+                {
+                    type: "add",
                     path: `${base}/tests/.gitkeep`,
                     templateFile: "plop-templates/_gitkeep.hbs",
+                },
+                {
+                    type: "add",
+                    path: `${base}/${m}.module.ts`,
+                    templateFile: "plop-templates/main-module.hbs",
                 },
             ];
         },
     });
 
-    // entity generator
+    // entity generator (FULL CRUD)
     plop.setGenerator("entity", {
         description:
-            "Create domain entity + ports + dto + service + persistence adapter + controller + tests",
+            "Create domain entity + ports + dto + service + persistence adapter + controller + tests (FULL CRUD)",
         prompts: [
             { type: "input", name: "module", message: "Module name (kebab-case)" },
             {
@@ -110,35 +120,101 @@ export default function (plop) {
 
             const actions = [];
 
-            // domain entity
+            // domain entity with mapToDomain
             actions.push({
                 type: "add",
                 path: `${base}/domains/entities/${e}.entity.ts`,
-                templateFile: "plop-templates/entity.hbs",
+                templateFile: "plop-templates/entity-crud.hbs",
                 data: { entity: e, fields: fieldsArr },
             });
 
-            // ports (out repository)
+            // ports/in - commands
             actions.push({
                 type: "add",
-                path: `${base}/domains/ports/out/i-${e}-repository.port.ts`,
-                templateFile: "plop-templates/repo-port.hbs",
+                path: `${base}/domains/ports/in/create-${e}.command.ts`,
+                templateFile: "plop-templates/command-create.hbs",
+                data: { entity: e, fields: fieldsArr },
+            });
+            actions.push({
+                type: "add",
+                path: `${base}/domains/ports/in/update-${e}.command.ts`,
+                templateFile: "plop-templates/command-update.hbs",
+                data: { entity: e, fields: fieldsArr },
+            });
+            actions.push({
+                type: "add",
+                path: `${base}/domains/ports/in/delete-${e}.command.ts`,
+                templateFile: "plop-templates/command-delete.hbs",
+                data: { entity: e },
+            });
+            actions.push({
+                type: "add",
+                path: `${base}/domains/ports/in/get-${e}.command.ts`,
+                templateFile: "plop-templates/command-get.hbs",
                 data: { entity: e },
             });
 
-            // dto
+            // ports/in - use-cases interface
             actions.push({
                 type: "add",
-                path: `${base}/modules/api/dto/${e}.dto.ts`,
-                templateFile: "plop-templates/dto.hbs",
+                path: `${base}/domains/ports/in/i-${e}.use-cases.ts`,
+                templateFile: "plop-templates/use-cases-interface.hbs",
+                data: { entity: e },
+            });
+
+            // ports/out - repository port (CRUD)
+            actions.push({
+                type: "add",
+                path: `${base}/domains/ports/out/i-${e}-repository.port.ts`,
+                templateFile: "plop-templates/repo-port-crud.hbs",
                 data: { entity: e, fields: fieldsArr },
             });
 
-            // domain service / use-case
+            // domain service (CRUD)
             actions.push({
                 type: "add",
-                path: `${base}/domains/services/update-${e}.service.ts`,
-                templateFile: "plop-templates/usecase.hbs",
+                path: `${base}/domains/services/${e}-crud.service.ts`,
+                templateFile: "plop-templates/service-crud.hbs",
+                data: { entity: e, fields: fieldsArr },
+            });
+
+            // dto - request (create)
+            actions.push({
+                type: "add",
+                path: `${base}/modules/api/dto/${e}.request.ts`,
+                templateFile: "plop-templates/dto-request.hbs",
+                data: { entity: e, fields: fieldsArr },
+            });
+
+            // dto - update request
+            actions.push({
+                type: "add",
+                path: `${base}/modules/api/dto/${e}-update.request.ts`,
+                templateFile: "plop-templates/dto-update-request.hbs",
+                data: { entity: e, fields: fieldsArr },
+            });
+
+            // dto - delete request
+            actions.push({
+                type: "add",
+                path: `${base}/modules/api/dto/${e}-delete.request.ts`,
+                templateFile: "plop-templates/dto-delete-request.hbs",
+                data: { entity: e },
+            });
+
+            // dto - find request
+            actions.push({
+                type: "add",
+                path: `${base}/modules/api/dto/${e}-find.request.ts`,
+                templateFile: "plop-templates/dto-find-request.hbs",
+                data: { entity: e },
+            });
+
+            // dto - response
+            actions.push({
+                type: "add",
+                path: `${base}/modules/api/dto/${e}.response.ts`,
+                templateFile: "plop-templates/dto-response.hbs",
                 data: { entity: e, fields: fieldsArr },
             });
 
@@ -150,20 +226,20 @@ export default function (plop) {
                 data: { entity: e, fields: fieldsArr },
             });
 
-            // persistence adapter file
+            // persistence adapter file (CRUD)
             actions.push({
                 type: "add",
                 path: `${base}/modules/persistence/${e}-repository.adapter.ts`,
-                templateFile: "plop-templates/adapter.hbs",
-                data: { entity: e },
+                templateFile: "plop-templates/adapter-crud.hbs",
+                data: { entity: e, fields: fieldsArr },
             });
 
-            // controller
+            // controller (FULL CRUD)
             actions.push({
                 type: "add",
                 path: `${base}/modules/api/${e}.controller.ts`,
-                templateFile: "plop-templates/controller.hbs",
-                data: { module: m, entity: e },
+                templateFile: "plop-templates/controller-crud.hbs",
+                data: { module: m, entity: e, fields: fieldsArr },
             });
 
             // test skeleton
@@ -174,7 +250,7 @@ export default function (plop) {
                 data: { entity: e },
             });
 
-            // now: ensure persistence module exists or create it
+            // ensure persistence module exists or create it
             const persistenceModulePath = path.join(
                 process.cwd(),
                 base,
@@ -183,16 +259,13 @@ export default function (plop) {
                 `${m}-persistence.module.ts`,
             );
             if (fs.existsSync(persistenceModulePath)) {
-                // modify existing file
                 actions.push({
                     type: "modify",
                     path: `${base}/modules/persistence/${m}-persistence.module.ts`,
-                    pattern: /(export class [\s\S]*?\n\})/m,
-                    template:
-                        "$1\n// CLAUDE: ensure adapter is provided in module providers (if using DI)\n",
+                    pattern: /(providers: \[)/,
+                    template: `$1\n        // CLAUDE: Register ${e} repository adapter here`,
                 });
             } else {
-                // create a persistence module skeleton so modify won't fail later
                 actions.push({
                     type: "add",
                     path: `${base}/modules/persistence/${m}-persistence.module.ts`,
