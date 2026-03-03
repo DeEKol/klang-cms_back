@@ -92,6 +92,6 @@ export class LessonCrudService implements ILessonUseCases {
     }
 
     deletePage(command: DeletePageCommand): Promise<boolean> {
-        return this._lessonCrudPorts.deletePage(command.lessonId, command.pageNumber);
+        return this._lessonCrudPorts.deletePage(command.id);
     }
 }

@@ -145,16 +145,22 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         return !!updatedPage.affected;
     }
 
-    async deletePage(lessonId: string, pageNumber: number): Promise<boolean> {
-        const lessonOrmEntity = await this.getLesson(lessonId);
+    getPage(id: string): Promise<PageOrmEntity | null> {
+        return this._lessonPageRepository.findOne({
+            where: { id: id },
+        });
+    }
 
-        if (lessonOrmEntity) {
-            const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
-                lesson: lessonOrmEntity,
-                order: pageNumber,
-            });
+    async deletePage(id: string): Promise<boolean> {
+        const pageOrmEntity = await this.getPage(id);
 
-            const removedPage = await this._lessonPageRepository.remove(lessonPageOrmEntity);
+        if (pageOrmEntity) {
+            // const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
+            //     lesson: lessonOrmEntity,
+            //     order: pageNumber,
+            // });
+
+            const removedPage = await this._lessonPageRepository.remove(pageOrmEntity);
 
             return !!removedPage;
         }

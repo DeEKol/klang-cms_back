@@ -1,16 +1,21 @@
-import { TLessonId, TPageNumber } from "../out/i-lesson-crud.ports";
+import { TPageId } from "../out/i-lesson-crud.ports";
 
 export class DeletePageCommand {
     constructor(
-        private readonly _lessonId: TLessonId,
-        private readonly _pageNumber: TPageNumber,
+        private readonly _id: TPageId,
+        // private readonly _lessonId: TLessonId,
+        // private readonly _pageNumber: TPageNumber,
     ) {}
 
-    get lessonId(): TLessonId {
-        return this._lessonId;
+    get id(): TPageId {
+        return this._id;
     }
 
-    get pageNumber(): TPageNumber {
-        return this._pageNumber;
-    }
+    // get lessonId(): TLessonId {
+    //     return this._lessonId;
+    // }
+    //
+    // get pageNumber(): TPageNumber {
+    //     return this._pageNumber;
+    // }
 }

@@ -8,8 +8,9 @@ export class PageDeleteRequest {
         description: "uuid",
         required: false,
     })
-    lessonId: string;
-
-    @ApiProperty({ example: "1", description: "Page number", required: false })
-    pageNumber: number;
+    id: string;
+    // lessonId: string;
+    //
+    // @ApiProperty({ example: "1", description: "Page number", required: false })
+    // pageNumber: number;
 }

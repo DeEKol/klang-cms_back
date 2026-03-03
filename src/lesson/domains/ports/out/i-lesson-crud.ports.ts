@@ -23,7 +23,7 @@ export interface ILessonCrudPorts {
     deleteLesson(id: TLessonId): Promise<boolean>;
 
     createPage(text: string, pageNumber: number, lessonId: string): Promise<PageOrmEntity | null>;
-    deletePage(id: TLessonId, pageNumber: TPageNumber): Promise<boolean>;
+    deletePage(id: TPageId): Promise<boolean>;
     updatePage(
         id: TPageId,
         pageNumber?: TPageNumber,

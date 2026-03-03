@@ -19,8 +19,8 @@ export class PageApiController {
 
     @Delete("delete/:id")
     @ApiResponse({ status: 200, description: "Delete one page", type: Boolean })
-    async deletePage(@Param() { lessonId, pageNumber }: PageDeleteRequest): Promise<boolean> {
-        const command = new DeletePageCommand(lessonId, pageNumber);
+    async deletePage(@Param() { id }: PageDeleteRequest): Promise<boolean> {
+        const command = new DeletePageCommand(id);
 
         return this._lessonCrudUseCases.deletePage(command);
     }
