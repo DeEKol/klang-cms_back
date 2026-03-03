@@ -1,0 +1,78 @@
+import { Body, Controller, Delete, Get, Inject, Param, Post } from "@nestjs/common";
+import { ApiBody, ApiParam, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import {
+    I{{pascalCase entity}}UseCases,
+    S{{pascalCase entity}}UseCases,
+} from "../../domains/ports/in/i-{{entity}}.use-cases";
+import { Get{{pascalCase entity}}Command } from "../../domains/ports/in/get-{{entity}}.command";
+import { Delete{{pascalCase entity}}Command } from "../../domains/ports/in/delete-{{entity}}.command";
+import { Create{{pascalCase entity}}Command } from "../../domains/ports/in/create-{{entity}}.command";
+import { Update{{pascalCase entity}}Command } from "../../domains/ports/in/update-{{entity}}.command";
+import { {{pascalCase entity}}Response } from "./dto/{{entity}}.response";
+import { {{pascalCase entity}}Request } from "./dto/{{entity}}.request";
+import { {{pascalCase entity}}UpdateRequest } from "./dto/{{entity}}-update.request";
+import { {{pascalCase entity}}DeleteRequest } from "./dto/{{entity}}-delete.request";
+import { {{pascalCase entity}}FindRequest } from "./dto/{{entity}}-find.request";
+
+@ApiTags("{{pascalCase entity}}")
+@Controller("{{module}}/{{entity}}")
+export class {{pascalCase entity}}Controller {
+    constructor(
+        @Inject(S{{pascalCase entity}}UseCases)
+        private readonly _{{entity}}UseCases: I{{pascalCase entity}}UseCases,
+    ) {}
+
+    @Get("get/:id")
+    @ApiParam({ name: "id", type: "string" })
+    @ApiResponse({
+        status: 200,
+        description: "Get one",
+        schema: {
+            anyOf: [{ $ref: getSchemaPath({{pascalCase entity}}Response) }, { type: "null" }],
+        },
+    })
+    async findOne(
+        @Param() { id }: {{pascalCase entity}}FindRequest,
+    ): Promise<{{pascalCase entity}}Response | null> {
+        const command = new Get{{pascalCase entity}}Command(id);
+        const entity = await this._{{entity}}UseCases.get{{pascalCase entity}}(command);
+
+        return {{pascalCase entity}}Response.mapToResponse(entity);
+    }
+
+    @Delete("delete/:id")
+    @ApiParam({ name: "id", type: "string" })
+    @ApiResponse({ status: 200, description: "Delete one", type: Boolean })
+    async deleteOne(@Param() { id }: {{pascalCase entity}}DeleteRequest): Promise<boolean> {
+        const command = new Delete{{pascalCase entity}}Command(id);
+
+        return this._{{entity}}UseCases.delete{{pascalCase entity}}(command);
+    }
+
+    @Post("update")
+    @ApiBody({ type: {{pascalCase entity}}UpdateRequest })
+    @ApiResponse({ status: 200, description: "Update", type: Boolean })
+    async update(@Body() dto: {{pascalCase entity}}UpdateRequest): Promise<boolean> {
+        const command = new Update{{pascalCase entity}}Command(
+            dto.id,
+{{#each fields}}            dto.{{this.name}},
+{{/each}}        );
+
+        return this._{{entity}}UseCases.update{{pascalCase entity}}(command);
+    }
+
+    @Post("create")
+    @ApiBody({ type: {{pascalCase entity}}Request })
+    @ApiResponse({ status: 200, description: "Create", type: {{pascalCase entity}}Response })
+    async create(
+        @Body() dto: {{pascalCase entity}}Request,
+    ): Promise<{{pascalCase entity}}Response | null> {
+        const command = new Create{{pascalCase entity}}Command(
+{{#each fields}}            dto.{{this.name}},
+{{/each}}        );
+
+        const entity = await this._{{entity}}UseCases.create{{pascalCase entity}}(command);
+
+        return {{pascalCase entity}}Response.mapToResponse(entity);
+    }
+}

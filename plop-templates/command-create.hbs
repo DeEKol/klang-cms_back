@@ -1,0 +1,11 @@
+export class Create{{pascalCase entity}}Command {
+    constructor(
+{{#each fields}}        private readonly _{{this.name}}: {{this.type}},
+{{/each}}    ) {}
+{{#each fields}}
+
+    get {{this.name}}(): {{this.type}} {
+        return this._{{this.name}};
+    }
+{{/each}}
+}

@@ -1,0 +1,8 @@
+export class {{pascalCase entity}}Entity {
+    constructor(
+        public readonly id: string,
+{{#each fields}}        public {{this.name}}{{#if (eq this.type "Date")}}?: Date{{else}}: {{this.type}}{{/if}}{{#unless @last}},{{/unless}}
+{{/each}}    ) {}
+}
+
+// CLAUDE: domain entity for {{entity}}

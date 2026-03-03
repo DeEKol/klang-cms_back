@@ -1,0 +1,15 @@
+import { Injectable } from "@nestjs/common";
+import { I{{pascalCase entity}}RepositoryPort } from "../ports/out/i-{{entity}}-repository.port";
+import { {{pascalCase entity}}Entity } from "../entities/{{entity}}.entity";
+
+@Injectable()
+export class Update{{pascalCase entity}}Service {
+    constructor(private readonly repo: I{{pascalCase entity}}RepositoryPort) {}
+
+    async execute(id: string, payload: Partial<{{pascalCase entity}}Entity>): Promise<{{pascalCase entity}}Entity> {
+        // CLAUDE: implement validation
+        const e = new {{pascalCase entity}}Entity(id, {{#each fields}}payload.{{this.name}}{{#unless @last}},{{/unless}}{{/each}});
+        await this.repo.save(e);
+        return e;
+    }
+}

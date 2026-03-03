@@ -3,8 +3,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
 
 import { AuthService } from "../../domains/services/auth.service";
-import { UserOrmEntity } from "../persistence/user/user.orm-entity";
-import { UserRepository } from "../persistence/user-repository";
+import { UserOrmEntity } from "./user/user.orm-entity";
+import { UserRepository } from "./user-repository";
 
 @Global()
 @Module({

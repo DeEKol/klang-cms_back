@@ -1,0 +1,6 @@
+// ORM adapter entity for {{pascalCase entity}}
+export class {{pascalCase entity}}OrmEntity {
+    id!: string;
+{{#each fields}}    {{this.name}}!: {{#if (eq this.type "Date")}}Date{{else}}{{this.type}}{{/if}};
+{{/each}}
+}

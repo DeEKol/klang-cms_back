@@ -1,0 +1,10 @@
+import { Module } from "@nestjs/common";
+import { {{pascalCase module}}ApiModule } from "./modules/api/{{module}}-api.module";
+import { {{pascalCase module}}PersistenceModule } from "./modules/persistence/{{module}}-persistence.module";
+
+@Module({
+    imports: [{{pascalCase module}}PersistenceModule, {{pascalCase module}}ApiModule],
+    controllers: [],
+    providers: [],
+})
+export class {{pascalCase module}}Module {}

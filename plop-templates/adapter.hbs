@@ -1,0 +1,13 @@
+import { I{{pascalCase entity}}RepositoryPort } from "../../domains/ports/out/i-{{entity}}-repository.port";
+import { {{pascalCase entity}}Entity } from "../../domains/entities/{{entity}}.entity";
+
+export class {{pascalCase entity}}RepositoryAdapter implements I{{pascalCase entity}}RepositoryPort {
+    async findById(id: string): Promise<{{pascalCase entity}}Entity | null> {
+        // CLAUDE: implement DB lookup
+        return null;
+    }
+
+    async save(entity: {{pascalCase entity}}Entity): Promise<void> {
+        // CLAUDE: persist via ORM
+    }
+}

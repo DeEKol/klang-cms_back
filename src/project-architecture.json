@@ -1,0 +1,352 @@
+{
+    "observedTree": {
+        "name": "src",
+        "path": "src",
+        "type": "dir",
+        "children": [
+            {
+                "name": "lesson",
+                "path": "src/lesson",
+                "type": "dir",
+                "children": [
+                    {
+                        "name": "domains",
+                        "path": "src/lesson/domains",
+                        "type": "dir",
+                        "children": [
+                            {
+                                "name": "entities",
+                                "path": "src/lesson/domains/entities",
+                                "type": "dir",
+                                "children": [
+                                    {
+                                        "name": "lesson.entity.ts",
+                                        "path": "src/lesson/domains/entities/lesson.entity.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "page.entity.ts",
+                                        "path": "src/lesson/domains/entities/page.entity.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "section.entity.ts",
+                                        "path": "src/lesson/domains/entities/section.entity.ts",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "ports",
+                                "path": "src/lesson/domains/ports",
+                                "type": "dir",
+                                "children": [
+                                    {
+                                        "name": "in",
+                                        "path": "src/lesson/domains/ports/in",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "create-lesson.command.ts",
+                                                "path": "src/lesson/domains/ports/in/create-lesson.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "create-page.command.ts",
+                                                "path": "src/lesson/domains/ports/in/create-page.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "create-section.command.ts",
+                                                "path": "src/lesson/domains/ports/in/create-section.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "delete-lesson.command.ts",
+                                                "path": "src/lesson/domains/ports/in/delete-lesson.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "delete-page.command.ts",
+                                                "path": "src/lesson/domains/ports/in/delete-page.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "delete-section.command.ts",
+                                                "path": "src/lesson/domains/ports/in/delete-section.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "get-lesson.command.ts",
+                                                "path": "src/lesson/domains/ports/in/get-lesson.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "get-section-all.command.ts",
+                                                "path": "src/lesson/domains/ports/in/get-section-all.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "get-section.command.ts",
+                                                "path": "src/lesson/domains/ports/in/get-section.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "i-lesson.use-cases.ts",
+                                                "path": "src/lesson/domains/ports/in/i-lesson.use-cases.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "update-lesson.command.ts",
+                                                "path": "src/lesson/domains/ports/in/update-lesson.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "update-page.command.ts",
+                                                "path": "src/lesson/domains/ports/in/update-page.command.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "update-section.command.ts",
+                                                "path": "src/lesson/domains/ports/in/update-section.command.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "out",
+                                        "path": "src/lesson/domains/ports/out",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "i-lesson-crud.ports.ts",
+                                                "path": "src/lesson/domains/ports/out/i-lesson-crud.ports.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "services",
+                                "path": "src/lesson/domains/services",
+                                "type": "dir",
+                                "children": [
+                                    {
+                                        "name": "lesson-crud.service.ts",
+                                        "path": "src/lesson/domains/services/lesson-crud.service.ts",
+                                        "type": "file"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "lesson.module.ts",
+                        "path": "src/lesson/lesson.module.ts",
+                        "type": "file"
+                    },
+                    {
+                        "name": "modules",
+                        "path": "src/lesson/modules",
+                        "type": "dir",
+                        "children": [
+                            {
+                                "name": "api",
+                                "path": "src/lesson/modules/api",
+                                "type": "dir",
+                                "children": [
+                                    {
+                                        "name": "dto",
+                                        "path": "src/lesson/modules/api/dto",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "lesson-delete.request.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson-delete.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lesson-find.request.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson-find.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lesson-pages.response.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson-pages.response.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lesson-update.request.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson-update.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lesson.request.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lesson.response.ts",
+                                                "path": "src/lesson/modules/api/dto/lesson.response.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "page-create.request.ts",
+                                                "path": "src/lesson/modules/api/dto/page-create.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "page-delete.request.ts",
+                                                "path": "src/lesson/modules/api/dto/page-delete.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "page-update.request.ts",
+                                                "path": "src/lesson/modules/api/dto/page-update.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "page.response.ts",
+                                                "path": "src/lesson/modules/api/dto/page.response.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "section-create.request.ts",
+                                                "path": "src/lesson/modules/api/dto/section-create.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "section-delete.request.ts",
+                                                "path": "src/lesson/modules/api/dto/section-delete.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "section-find.request.ts",
+                                                "path": "src/lesson/modules/api/dto/section-find.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "section-update.request.ts",
+                                                "path": "src/lesson/modules/api/dto/section-update.request.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "section.response.ts",
+                                                "path": "src/lesson/modules/api/dto/section.response.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "lesson-api.controller.ts",
+                                        "path": "src/lesson/modules/api/lesson-api.controller.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "lesson-api.module.ts",
+                                        "path": "src/lesson/modules/api/lesson-api.module.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "page-api.controller.ts",
+                                        "path": "src/lesson/modules/api/page-api.controller.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "page-api.module.ts",
+                                        "path": "src/lesson/modules/api/page-api.module.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "section-api.controller.ts",
+                                        "path": "src/lesson/modules/api/section-api.controller.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "section-api.module.ts",
+                                        "path": "src/lesson/modules/api/section-api.module.ts",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "persistence",
+                                "path": "src/lesson/modules/persistence",
+                                "type": "dir",
+                                "children": [
+                                    {
+                                        "name": "lesson",
+                                        "path": "src/lesson/modules/persistence/lesson",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "lesson.orm-entity.ts",
+                                                "path": "src/lesson/modules/persistence/lesson/lesson.orm-entity.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "lesson-page",
+                                        "path": "src/lesson/modules/persistence/lesson-page",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "page.orm-entity.ts",
+                                                "path": "src/lesson/modules/persistence/lesson-page/page.orm-entity.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "lesson-persistence.adapter.ts",
+                                        "path": "src/lesson/modules/persistence/lesson-persistence.adapter.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "lesson-persistence.module.ts",
+                                        "path": "src/lesson/modules/persistence/lesson-persistence.module.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "section",
+                                        "path": "src/lesson/modules/persistence/section",
+                                        "type": "dir",
+                                        "children": [
+                                            {
+                                                "name": "section.orm-entity.ts",
+                                                "path": "src/lesson/modules/persistence/section/section.orm-entity.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "requirements": {
+        "modulePattern": "src/{module}",
+        "requiredFoldersPerModule": {
+            "domains": [
+                "entities",
+                "services"
+            ],
+            "modules": [
+                "api/dto",
+                "persistence"
+            ]
+        },
+        "conventions": {
+            "domainEntitySuffix": ".entity.ts",
+            "ormEntitySuffix": ".orm-entity.ts",
+            "repoAdapterSuffix": "-repository.adapter.ts",
+            "portPrefix": "i-",
+            "dtoSuffix": ".dto.ts"
+        }
+    }
+}

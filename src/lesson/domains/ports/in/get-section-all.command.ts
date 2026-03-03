@@ -1,4 +1,4 @@
-import { TSectionId } from "../out/i-lesson-crud.ports";
+import { TSectionId } from "../out/i-lesson-crud.port";
 
 export class GetSectionCommand {
     constructor(private readonly _id: TSectionId) {}

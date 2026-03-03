@@ -1,0 +1,6 @@
+import { {{pascalCase entity}}Entity } from "../../entities/{{entity}}.entity";
+
+export interface I{{pascalCase entity}}RepositoryPort {
+    findById(id: string): Promise<{{pascalCase entity}}Entity | null>;
+    save(entity: {{pascalCase entity}}Entity): Promise<void>;
+}

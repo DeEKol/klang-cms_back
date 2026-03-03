@@ -9,7 +9,7 @@ import { CreatePageCommand } from "../ports/in/create-page.command";
 import { DeletePageCommand } from "../ports/in/delete-page.command";
 import { UpdatePageCommand } from "../ports/in/update-page.command";
 import { UpdateLessonCommand } from "../ports/in/update-lesson.command";
-import { ILessonCrudPorts } from "../ports/out/i-lesson-crud.ports";
+import { ILessonCrudPorts } from "../ports/out/i-lesson-crud.port";
 import { GetSectionCommand } from "../ports/in/get-section.command";
 import { DeleteSectionCommand } from "../ports/in/delete-section.command";
 import { CreateSectionCommand } from "../ports/in/create-section.command";

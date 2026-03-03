@@ -1,0 +1,13 @@
+import { Controller, Patch, Param, Body } from "@nestjs/common";
+import { Update{{pascalCase entity}}Service } from "../../domains/services/update-{{entity}}.service";
+import { {{pascalCase entity}}Dto } from "./dto/{{entity}}.dto";
+
+@Controller("{{module}}/{{entity}}")
+export class {{pascalCase entity}}Controller {
+    constructor(private readonly updateSvc: Update{{pascalCase entity}}Service) {}
+
+    @Patch(":id")
+    async update(@Param("id") id: string, @Body() dto: any) {
+        return this.updateSvc.execute(id, dto);
+    }
+}

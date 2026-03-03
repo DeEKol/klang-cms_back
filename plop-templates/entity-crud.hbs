@@ -1,0 +1,26 @@
+import { {{pascalCase entity}}OrmEntity } from "../../modules/persistence/{{entity}}/{{entity}}.orm-entity";
+
+export class {{pascalCase entity}}Entity {
+    constructor(
+        private readonly _id: string,
+{{#each fields}}        private readonly _{{this.name}}: {{this.type}},
+{{/each}}    ) {}
+
+    get id(): string {
+        return this._id;
+    }
+{{#each fields}}
+    get {{this.name}}(): {{this.type}} {
+        return this._{{this.name}};
+    }
+{{/each}}
+
+    static mapToDomain(ormEntity: {{pascalCase entity}}OrmEntity | null): {{pascalCase entity}}Entity | null {
+        if (ormEntity)
+            return new {{pascalCase entity}}Entity(
+                ormEntity.id,
+{{#each fields}}                ormEntity.{{this.name}},
+{{/each}}            );
+        else return null;
+    }
+}

@@ -1,0 +1,22 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { {{pascalCase entity}}Entity } from "../../../domains/entities/{{entity}}.entity";
+
+export class {{pascalCase entity}}Response {
+    @ApiProperty({ example: "48709c63-458e-4f90-8c39-577416a790f2" })
+    id: string;
+{{#each fields}}
+
+    @ApiProperty({ example: "{{#if (eq this.type "string")}}Example {{this.name}}{{else}}{{#if (eq this.type "number")}}1{{else}}{{#if (eq this.type "boolean")}}true{{else}}null{{/if}}{{/if}}{{/if}}" })
+    {{this.name}}: {{this.type}};
+{{/each}}
+
+    constructor(id: string{{#each fields}}, {{this.name}}: {{this.type}}{{/each}}) {
+        this.id = id;
+{{#each fields}}        this.{{this.name}} = {{this.name}};
+{{/each}}    }
+
+    static mapToResponse(entity: {{pascalCase entity}}Entity | null): {{pascalCase entity}}Response | null {
+        if (entity) return new {{pascalCase entity}}Response(entity.id{{#each fields}}, entity.{{this.name}}{{/each}});
+        else return null;
+    }
+}
