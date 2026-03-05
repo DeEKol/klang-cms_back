@@ -3,12 +3,19 @@ import { PageOrmEntity } from "./lesson/modules/persistence/lesson-page/page.orm
 import { SectionOrmEntity } from "./lesson/modules/persistence/section/section.orm-entity";
 import { LessonOrmEntity } from "./lesson/modules/persistence/lesson/lesson.orm-entity";
 import { UserOrmEntity } from "./auth/modules/persistence/user/user.orm-entity";
+import { LessonProgressOrmEntity } from "./statistics/modules/persistence/lesson-progress/lesson-progress.orm-entity";
 
 export default new DataSource({
     type: "sqlite",
     database: "database.sqlite",
     // entities: [__dirname + "/**/*.orm-entity{.ts,.js}"],
-    entities: [PageOrmEntity, SectionOrmEntity, LessonOrmEntity, UserOrmEntity],
+    entities: [
+        PageOrmEntity,
+        SectionOrmEntity,
+        LessonOrmEntity,
+        UserOrmEntity,
+        LessonProgressOrmEntity,
+    ],
     synchronize: false,
     migrations: [__dirname + "/migrations/*.ts"],
 });

@@ -4,6 +4,7 @@ import { ConfigModule } from "@nestjs/config";
 import DataSource from "./data-source";
 import { LessonModule } from "./lesson/lesson.module";
 import { AuthModule } from "./auth/modules/auth.module";
+import { StatisticsModule } from "./statistics/statistics.module";
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from "./auth/modules/auth.module";
         TypeOrmModule.forRoot(DataSource.options),
         LessonModule,
         AuthModule,
+        StatisticsModule,
     ],
     controllers: [],
     providers: [],
