@@ -1,5 +1,5 @@
 import { PageEntity } from "./page.entity";
-import { LessonOrmEntity } from "../../modules/persistence/lesson/lesson.orm-entity";
+import { LessonOrmEntity } from "../../infrastructure/persistence/lesson/lesson.orm-entity";
 
 export class LessonEntity {
     constructor(

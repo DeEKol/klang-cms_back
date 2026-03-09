@@ -14,7 +14,7 @@ import { GetSectionCommand } from "../ports/in/get-section.command";
 import { DeleteSectionCommand } from "../ports/in/delete-section.command";
 import { CreateSectionCommand } from "../ports/in/create-section.command";
 import { UpdateSectionCommand } from "../ports/in/update-section.command";
-import { SectionOrmEntity } from "../../modules/persistence/section/section.orm-entity";
+import { SectionOrmEntity } from "../../infrastructure/persistence/section/section.orm-entity";
 
 export class LessonCrudService implements ILessonUseCases {
     constructor(private readonly _lessonCrudPorts: ILessonCrudPorts) {}

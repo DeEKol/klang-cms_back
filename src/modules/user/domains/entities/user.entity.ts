@@ -1,4 +1,4 @@
-import { UserOrmEntity } from "../../modules/persistence/user/user.orm-entity";
+import { UserOrmEntity } from "../../infrastructure/persistence/user/user.orm-entity";
 
 import type { TDecodedIdToken } from "../ports/out/i-firebase-auth.port";
 

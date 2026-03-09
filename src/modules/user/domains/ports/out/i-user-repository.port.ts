@@ -1,5 +1,5 @@
 import type { TDecodedIdToken } from "./i-firebase-auth.port";
-import { UserOrmEntity } from "../../../modules/persistence/user/user.orm-entity";
+import { UserOrmEntity } from "../../../infrastructure/persistence/user/user.orm-entity";
 
 export type TUserUid = string;
 

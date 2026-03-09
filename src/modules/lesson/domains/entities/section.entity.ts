@@ -1,4 +1,4 @@
-import { SectionOrmEntity } from "../../modules/persistence/section/section.orm-entity";
+import { SectionOrmEntity } from "../../infrastructure/persistence/section/section.orm-entity";
 import { LessonEntity } from "./lesson.entity";
 
 export class SectionEntity {

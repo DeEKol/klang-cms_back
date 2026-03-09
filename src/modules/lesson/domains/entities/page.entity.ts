@@ -1,4 +1,4 @@
-import { PageOrmEntity } from "../../modules/persistence/lesson-page/page.orm-entity";
+import { PageOrmEntity } from "../../infrastructure/persistence/lesson-page/page.orm-entity";
 
 export class PageEntity {
     constructor(

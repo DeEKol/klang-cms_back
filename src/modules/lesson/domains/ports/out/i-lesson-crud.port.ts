@@ -1,6 +1,6 @@
-import { LessonOrmEntity } from "../../../modules/persistence/lesson/lesson.orm-entity";
-import { PageOrmEntity } from "../../../modules/persistence/lesson-page/page.orm-entity";
-import { SectionOrmEntity } from "../../../modules/persistence/section/section.orm-entity";
+import { LessonOrmEntity } from "../../../infrastructure/persistence/lesson/lesson.orm-entity";
+import { PageOrmEntity } from "../../../infrastructure/persistence/lesson-page/page.orm-entity";
+import { SectionOrmEntity } from "../../../infrastructure/persistence/section/section.orm-entity";
 
 export type TSectionId = string;
 export type TSectionText = string;
