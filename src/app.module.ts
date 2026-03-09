@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import DataSource from "./data-source";
 import { LessonModule } from "./lesson/lesson.module";
-import { AuthModule } from "./auth/modules/auth.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
     imports: [
@@ -13,7 +13,7 @@ import { AuthModule } from "./auth/modules/auth.module";
         }),
         TypeOrmModule.forRoot(DataSource.options),
         LessonModule,
-        AuthModule,
+        UserModule,
     ],
     controllers: [],
     providers: [],

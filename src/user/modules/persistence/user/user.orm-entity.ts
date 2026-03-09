@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
-import type { TDecodedIdToken } from "../../../../firebase/admin";
+import type { TDecodedIdToken } from "../../../domains/ports/out/i-firebase-auth.port";
 
 export type TUserOrmEntity = UserOrmEntity;
 

@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { PageOrmEntity } from "./lesson/modules/persistence/lesson-page/page.orm-entity";
 import { SectionOrmEntity } from "./lesson/modules/persistence/section/section.orm-entity";
 import { LessonOrmEntity } from "./lesson/modules/persistence/lesson/lesson.orm-entity";
-import { UserOrmEntity } from "./auth/modules/persistence/user/user.orm-entity";
+import { UserOrmEntity } from "./user/modules/persistence/user/user.orm-entity";
 
 export default new DataSource({
     type: "sqlite",

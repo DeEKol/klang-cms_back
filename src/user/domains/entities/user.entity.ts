@@ -1,6 +1,6 @@
 import { UserOrmEntity } from "../../modules/persistence/user/user.orm-entity";
 
-import type { TDecodedIdToken } from "../../../firebase/admin";
+import type { TDecodedIdToken } from "../ports/out/i-firebase-auth.port";
 
 export class UserEntity {
     constructor(
