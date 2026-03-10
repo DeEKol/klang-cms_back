@@ -4,6 +4,7 @@ import { ConfigModule } from "@nestjs/config";
 import DataSource from "./data-source";
 import { LessonModule } from "./modules/lesson/lesson.module";
 import { UserModule } from "./modules/user/user.module";
+import "./infrastructure/cross-module-relations";
 
 @Module({
     imports: [
