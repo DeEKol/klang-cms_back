@@ -1,5 +1,11 @@
-import { PageEntity } from "./page.entity";
-import { LessonOrmEntity } from "../../infrastructure/persistence/lesson/lesson.orm-entity";
+import { PageEntity, IPageData } from "./page.entity";
+
+export interface ILessonData {
+    id: string;
+    text: string;
+    order: number;
+    pages?: IPageData[];
+}
 
 export class LessonEntity {
     constructor(
@@ -26,21 +32,16 @@ export class LessonEntity {
         return this._number;
     }
 
-    static mapToDomain(lessonOrmEntity: LessonOrmEntity | null): LessonEntity | null {
-        const lessonPageArray = lessonOrmEntity?.pages?.reduce((acc, page) => {
+    static mapToDomain(data: ILessonData | null): LessonEntity | null {
+        const lessonPageArray = data?.pages?.reduce((acc, page) => {
             const pageEntity = PageEntity.mapToDomain(page);
             if (pageEntity) acc.push(pageEntity);
 
             return acc;
         }, [] as PageEntity[]);
 
-        if (lessonOrmEntity)
-            return new LessonEntity(
-                lessonOrmEntity.id,
-                lessonOrmEntity.text,
-                lessonOrmEntity.order,
-                lessonPageArray ?? [],
-            );
+        if (data)
+            return new LessonEntity(data.id, data.text, data.order, lessonPageArray ?? []);
         else return null;
     }
 }

@@ -1,5 +1,5 @@
 import type { TDecodedIdToken } from "./i-firebase-auth.port";
-import { UserOrmEntity } from "../../../infrastructure/persistence/user/user.orm-entity";
+import { UserEntity } from "../../entities/user.entity";
 
 export type TUserUid = string;
 
@@ -12,9 +12,6 @@ export type TUserFirebasePayload = {
 };
 
 export interface IUserRepositoryPort {
-    findByUid(uid: TUserUid): Promise<UserOrmEntity | null>;
-    createOrUpdateFromFirebase(
-        uid: TUserUid,
-        payload: TUserFirebasePayload,
-    ): Promise<UserOrmEntity>;
+    findByUid(uid: TUserUid): Promise<UserEntity | null>;
+    createOrUpdateFromFirebase(uid: TUserUid, payload: TUserFirebasePayload): Promise<UserEntity>;
 }

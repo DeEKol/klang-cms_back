@@ -1,5 +1,11 @@
-import { SectionOrmEntity } from "../../infrastructure/persistence/section/section.orm-entity";
-import { LessonEntity } from "./lesson.entity";
+import { LessonEntity, ILessonData } from "./lesson.entity";
+
+export interface ISectionData {
+    id: string;
+    text: string;
+    order: number;
+    lessons?: ILessonData[];
+}
 
 export class SectionEntity {
     constructor(
@@ -25,8 +31,8 @@ export class SectionEntity {
         return this._lessons;
     }
 
-    static mapToDomain(sectionOrmEntity: SectionOrmEntity | null): SectionEntity | null {
-        const sectionLessonArray = sectionOrmEntity?.lessons?.reduce((acc, lesson) => {
+    static mapToDomain(data: ISectionData | null): SectionEntity | null {
+        const sectionLessonArray = data?.lessons?.reduce((acc, lesson) => {
             const lessonEntity = LessonEntity.mapToDomain(lesson);
 
             if (lessonEntity) acc.push(lessonEntity);
@@ -34,13 +40,8 @@ export class SectionEntity {
             return acc;
         }, [] as LessonEntity[]);
 
-        if (sectionOrmEntity)
-            return new SectionEntity(
-                sectionOrmEntity.id,
-                sectionOrmEntity.text,
-                sectionOrmEntity.order,
-                sectionLessonArray ?? [],
-            );
+        if (data)
+            return new SectionEntity(data.id, data.text, data.order, sectionLessonArray ?? []);
         else return null;
     }
 }

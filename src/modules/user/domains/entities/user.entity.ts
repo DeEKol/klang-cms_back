@@ -1,6 +1,16 @@
-import { UserOrmEntity } from "../../infrastructure/persistence/user/user.orm-entity";
-
 import type { TDecodedIdToken } from "../ports/out/i-firebase-auth.port";
+
+export interface IUserData {
+    id: string;
+    uid: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email?: string;
+    displayName?: string;
+    photoURL?: string;
+    provider?: string;
+    meta?: TDecodedIdToken;
+}
 
 export class UserEntity {
     constructor(
@@ -51,18 +61,18 @@ export class UserEntity {
         return this._updatedAt;
     }
 
-    static mapToDomain(userOrmEntity: UserOrmEntity | null): UserEntity | null {
-        return userOrmEntity
+    static mapToDomain(data: IUserData | null): UserEntity | null {
+        return data
             ? new UserEntity(
-                  userOrmEntity.id,
-                  userOrmEntity.uid,
-                  userOrmEntity.createdAt,
-                  userOrmEntity.updatedAt,
-                  userOrmEntity.email,
-                  userOrmEntity.displayName,
-                  userOrmEntity.photoURL,
-                  userOrmEntity.provider,
-                  userOrmEntity.meta,
+                  data.id,
+                  data.uid,
+                  data.createdAt,
+                  data.updatedAt,
+                  data.email,
+                  data.displayName,
+                  data.photoURL,
+                  data.provider,
+                  data.meta,
               )
             : null;
     }

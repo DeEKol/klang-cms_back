@@ -7,8 +7,16 @@ import {
     ILessonCrudPorts,
     TSectionId,
     TSectionText,
+    TLessonId,
+    TLessonText,
+    TPageId,
+    TPageNumber,
+    TPageText,
 } from "../../domains/ports/out/i-lesson-crud.port";
 import { SectionOrmEntity } from "./section/section.orm-entity";
+import { SectionEntity } from "../../domains/entities/section.entity";
+import { LessonEntity } from "../../domains/entities/lesson.entity";
+import { PageEntity } from "../../domains/entities/page.entity";
 
 @Injectable()
 export class LessonPersistenceAdapter implements ILessonCrudPorts {
@@ -21,24 +29,34 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         private readonly _lessonPageRepository: Repository<PageOrmEntity>,
     ) {}
 
-    getSection(id: TSectionId): Promise<SectionOrmEntity | null> {
+    private getSectionOrm(id: TSectionId): Promise<SectionOrmEntity | null> {
         return this._sectionRepository.findOne({
-            where: { id: id },
+            where: { id },
             relations: ["lessons"],
         });
     }
 
-    getSections(): Promise<SectionOrmEntity[] | []> {
-        return this._sectionRepository.find({
-            relations: ["lessons"],
-        });
+    async getSection(id: TSectionId): Promise<SectionEntity | null> {
+        const orm = await this.getSectionOrm(id);
+        return SectionEntity.mapToDomain(orm);
     }
 
-    async createSection(text: TSectionText): Promise<SectionOrmEntity | null> {
+    async getSections(): Promise<SectionEntity[]> {
+        const orms = await this._sectionRepository.find({
+            relations: ["lessons"],
+        });
+        return orms.reduce((acc, orm) => {
+            const entity = SectionEntity.mapToDomain(orm);
+            if (entity) acc.push(entity);
+            return acc;
+        }, [] as SectionEntity[]);
+    }
+
+    async createSection(text: TSectionText): Promise<SectionEntity | null> {
         const sectionOrmEntity = new SectionOrmEntity();
         sectionOrmEntity.text = text;
-
-        return await this._sectionRepository.save(sectionOrmEntity);
+        const saved = await this._sectionRepository.save(sectionOrmEntity);
+        return SectionEntity.mapToDomain(saved);
     }
 
     async updateSection(id: TSectionId, text?: TSectionText): Promise<boolean> {
@@ -51,7 +69,7 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
     }
 
     async deleteSection(id: TSectionId): Promise<boolean> {
-        const sectionOrmEntity = await this.getSection(id);
+        const sectionOrmEntity = await this.getSectionOrm(id);
 
         if (sectionOrmEntity) {
             for (const lesson of sectionOrmEntity.lessons) {
@@ -68,21 +86,26 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         return false;
     }
 
-    getLesson(id: string): Promise<LessonOrmEntity | null> {
+    private getLessonOrm(id: TLessonId): Promise<LessonOrmEntity | null> {
         return this._lessonRepository.findOne({
-            where: { id: id },
+            where: { id },
             relations: ["pages"],
         });
     }
 
-    async createLesson(text: string): Promise<LessonOrmEntity | null> {
-        const lessonOrmEntity = new LessonOrmEntity();
-        lessonOrmEntity.text = text;
-
-        return await this._lessonRepository.save(lessonOrmEntity);
+    async getLesson(id: TLessonId): Promise<LessonEntity | null> {
+        const orm = await this.getLessonOrm(id);
+        return LessonEntity.mapToDomain(orm);
     }
 
-    async updateLesson(id: string, text?: string): Promise<boolean> {
+    async createLesson(text: TLessonText): Promise<LessonEntity | null> {
+        const lessonOrmEntity = new LessonOrmEntity();
+        lessonOrmEntity.text = text;
+        const saved = await this._lessonRepository.save(lessonOrmEntity);
+        return LessonEntity.mapToDomain(saved);
+    }
+
+    async updateLesson(id: TLessonId, text?: TLessonText): Promise<boolean> {
         const lessonOrmEntity = new LessonOrmEntity();
         if (text) lessonOrmEntity.text = text;
 
@@ -91,8 +114,8 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         return !!updatedLesson.affected;
     }
 
-    async deleteLesson(id: string): Promise<boolean> {
-        const lessonOrmEntity = await this.getLesson(id);
+    async deleteLesson(id: TLessonId): Promise<boolean> {
+        const lessonOrmEntity = await this.getLessonOrm(id);
 
         if (lessonOrmEntity) {
             await this._lessonPageRepository.remove(lessonOrmEntity?.pages);
@@ -109,8 +132,8 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         text: string,
         pageNumber: number,
         lessonId: string,
-    ): Promise<PageOrmEntity | null> {
-        const lessonOrmEntity = await this.getLesson(lessonId);
+    ): Promise<PageEntity | null> {
+        const lessonOrmEntity = await this.getLessonOrm(lessonId);
 
         if (lessonOrmEntity) {
             const lessonPageOrmEntity = new PageOrmEntity();
@@ -118,24 +141,25 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
             lessonPageOrmEntity.order = pageNumber;
             lessonPageOrmEntity.lesson = lessonOrmEntity;
 
-            return await this._lessonPageRepository.save(lessonPageOrmEntity);
+            const saved = await this._lessonPageRepository.save(lessonPageOrmEntity);
+            return PageEntity.mapToDomain(saved);
         }
 
         return null;
     }
 
     async updatePage(
-        id: string,
-        pageNumber?: number,
-        text?: string,
-        lessonId?: string,
+        id: TPageId,
+        pageNumber?: TPageNumber,
+        text?: TPageText,
+        lessonId?: TLessonId,
     ): Promise<boolean> {
         const lessonPageOrmEntity = new PageOrmEntity();
         if (pageNumber) lessonPageOrmEntity.order = pageNumber;
         if (text) lessonPageOrmEntity.text = text;
 
         if (lessonId) {
-            const lessonOrmEntity = await this.getLesson(lessonId);
+            const lessonOrmEntity = await this.getLessonOrm(lessonId);
 
             if (lessonOrmEntity) lessonPageOrmEntity.lesson = lessonOrmEntity;
         }
@@ -145,21 +169,16 @@ export class LessonPersistenceAdapter implements ILessonCrudPorts {
         return !!updatedPage.affected;
     }
 
-    getPage(id: string): Promise<PageOrmEntity | null> {
+    private getPageOrm(id: TPageId): Promise<PageOrmEntity | null> {
         return this._lessonPageRepository.findOne({
-            where: { id: id },
+            where: { id },
         });
     }
 
-    async deletePage(id: string): Promise<boolean> {
-        const pageOrmEntity = await this.getPage(id);
+    async deletePage(id: TPageId): Promise<boolean> {
+        const pageOrmEntity = await this.getPageOrm(id);
 
         if (pageOrmEntity) {
-            // const lessonPageOrmEntity = await this._lessonPageRepository.findBy({
-            //     lesson: lessonOrmEntity,
-            //     order: pageNumber,
-            // });
-
             const removedPage = await this._lessonPageRepository.remove(pageOrmEntity);
 
             return !!removedPage;

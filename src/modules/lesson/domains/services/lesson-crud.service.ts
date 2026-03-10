@@ -14,7 +14,6 @@ import { GetSectionCommand } from "../ports/in/get-section.command";
 import { DeleteSectionCommand } from "../ports/in/delete-section.command";
 import { CreateSectionCommand } from "../ports/in/create-section.command";
 import { UpdateSectionCommand } from "../ports/in/update-section.command";
-import { SectionOrmEntity } from "../../infrastructure/persistence/section/section.orm-entity";
 
 export class LessonCrudService implements ILessonUseCases {
     constructor(private readonly _lessonCrudPorts: ILessonCrudPorts) {}
@@ -26,7 +25,7 @@ export class LessonCrudService implements ILessonUseCases {
     }
 
     async getSections(): Promise<SectionEntity[] | []> {
-        const sectionOrmEntities: SectionOrmEntity[] | [] =
+        const sectionOrmEntities =
             await this._lessonCrudPorts.getSections();
 
         return sectionOrmEntities.reduce((acc, sectionOrmEntity) => {

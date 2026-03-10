@@ -39,7 +39,44 @@ src/{module}/
    - **In Ports**: Use cases/commands that the domain exposes
    - **Out Ports**: Repository interfaces (prefixed with `i-`, e.g., `i-user-repository.port.ts`)
 5. **Adapters**: Implementations of out ports (e.g., `*-repository.adapter.ts`)
-6. **Mapping**: Domain entities have static `mapToDomain()` methods to convert from ORM entities
+6. **Mapping**: Done in adapters (persistence layer), NOT in domain. See rules below.
+
+### Mapping Rules (CRITICAL — enforced in codebase)
+
+**Domain entities MUST NOT import ORM entities.** The dependency rule is absolute.
+
+| Layer | Allowed imports | Forbidden imports |
+|---|---|---|
+| `domains/entities/` | other domain entities, domain ports | `*.orm-entity.ts`, NestJS, TypeORM |
+| `domains/ports/out/` | domain entities | `*.orm-entity.ts` |
+| `domains/services/` | domain entities, domain ports | `*.orm-entity.ts` |
+| `infrastructure/persistence/` | domain entities + ORM entities | — |
+
+**`mapToDomain()` pattern** — method lives on domain entity, accepts a plain-data interface:
+```typescript
+// page.entity.ts
+export interface IPageData { id: string; text: string; order: number; }
+
+export class PageEntity {
+    static mapToDomain(data: IPageData | null): PageEntity | null { ... }
+}
+```
+
+**Adapter pattern** — mapping happens in adapter, private ORM methods for internal use:
+```typescript
+// lesson-persistence.adapter.ts
+private getLessonOrm(id: string): Promise<LessonOrmEntity | null> { ... } // internal only
+
+async getLesson(id: string): Promise<LessonEntity | null> {   // port method
+    const orm = await this.getLessonOrm(id);
+    return LessonEntity.mapToDomain(orm);                      // mapping here
+}
+```
+
+Data flow:
+```
+ORM entity → adapter.mapToDomain() → domain entity → service → controller.mapToResponse() → DTO
+```
 
 ### Cross-Module ORM Relations
 

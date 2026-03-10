@@ -1,4 +1,8 @@
-import { PageOrmEntity } from "../../infrastructure/persistence/lesson-page/page.orm-entity";
+export interface IPageData {
+    id: string;
+    text: string;
+    order: number;
+}
 
 export class PageEntity {
     constructor(
@@ -19,8 +23,8 @@ export class PageEntity {
         return this._order;
     }
 
-    static mapToDomain(lesson: PageOrmEntity | null): PageEntity | null {
-        if (lesson) return new PageEntity(lesson.id, lesson.text, lesson.order);
+    static mapToDomain(data: IPageData | null): PageEntity | null {
+        if (data) return new PageEntity(data.id, data.text, data.order);
         else return null;
     }
 }
