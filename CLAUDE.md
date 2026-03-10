@@ -41,6 +41,41 @@ src/{module}/
 5. **Adapters**: Implementations of out ports (e.g., `*-repository.adapter.ts`)
 6. **Mapping**: Domain entities have static `mapToDomain()` methods to convert from ORM entities
 
+### Cross-Module ORM Relations
+
+**Rule: `*.orm-entity.ts` must NOT import `*.orm-entity.ts` from another module.**
+
+| Relation type | Where to declare | How |
+|---|---|---|
+| Within the same module | In the `*.orm-entity.ts` file itself | Standard TypeORM decorators (`@ManyToOne`, `@OneToMany`, etc.) |
+| Between different modules | `src/infrastructure/relations/*.decorator.ts` | Custom decorator wrapping TypeORM decorators |
+
+**High cohesion** — relations inside a module use TypeORM decorators directly:
+```typescript
+// lesson.orm-entity.ts — within lesson module
+@OneToMany(() => PageOrmEntity, (page) => page.lesson)
+pages: PageOrmEntity[];
+```
+
+**Low coupling** — relations across modules go through a custom decorator in `src/infrastructure/relations/`:
+```typescript
+// src/infrastructure/relations/user-relation.decorator.ts
+export function UserRelation(): PropertyDecorator {
+    return (target, propertyKey) => {
+        ManyToOne(() => UserOrmEntity, { nullable: false })(target, propertyKey as string);
+        JoinColumn({ name: "user_id", referencedColumnName: "id" })(target, propertyKey as string);
+    };
+}
+
+// user-progress.orm-entity.ts — references user module via decorator only
+import { UserRelation } from "../../../../../infrastructure/relations/user-relation.decorator";
+
+@UserRelation()
+userId: string;
+```
+
+See [`src/infrastructure/relations/REAMDE.md`](src/infrastructure/relations/REAMDE.md) for details.
+
 ## Code Generation with Plop
 
 **CRITICAL**: Always use Plop generators for creating new modules and entities. This ensures architectural consistency.

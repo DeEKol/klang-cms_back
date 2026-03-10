@@ -4,7 +4,6 @@ import { SectionOrmEntity } from "./modules/lesson/infrastructure/persistence/se
 import { LessonOrmEntity } from "./modules/lesson/infrastructure/persistence/lesson/lesson.orm-entity";
 import { UserOrmEntity } from "./modules/user/infrastructure/persistence/user/user.orm-entity";
 import { UserProgressOrmEntity } from "./modules/lesson/infrastructure/persistence/user-progress/user-progress.orm-entity";
-import "./infrastructure/cross-module-relations";
 
 export default new DataSource({
     type: "sqlite",

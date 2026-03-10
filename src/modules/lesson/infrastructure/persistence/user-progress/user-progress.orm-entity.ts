@@ -8,8 +8,10 @@ import {
     UpdateDateColumn,
     Unique,
 } from "typeorm";
+
 import { LessonOrmEntity } from "../lesson/lesson.orm-entity";
 import { PageOrmEntity } from "../lesson-page/page.orm-entity";
+import { UserRelation } from "../../../../../infrastructure/relations/user-relation.decorator";
 
 @Entity({ name: "user_progress" })
 @Unique(["userId", "lesson"])
@@ -17,12 +19,8 @@ export class UserProgressOrmEntity {
     @PrimaryGeneratedColumn("increment", { name: "id_pk" })
     idPk: number;
 
-    @Column({ name: "user_id", nullable: false })
+    @UserRelation()
     userId: string;
-
-    // Relation registered programmatically in src/infrastructure/cross-module-relations.ts
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user?: any;
 
     @ManyToOne(() => LessonOrmEntity)
     @JoinColumn({ name: "lesson_id" })
