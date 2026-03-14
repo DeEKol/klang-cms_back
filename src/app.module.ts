@@ -4,6 +4,8 @@ import { ConfigModule } from "@nestjs/config";
 import DataSource from "./data-source";
 import { LessonModule } from "./modules/lesson/lesson.module";
 import { UserModule } from "./modules/user/user.module";
+import { WorkerModule } from "./modules/worker/worker.module";
+import { JwtSharedModule } from "./infrastructure/jwt/jwt.module";
 
 @Module({
     imports: [
@@ -12,8 +14,10 @@ import { UserModule } from "./modules/user/user.module";
             envFilePath: ["./.env"],
         }),
         TypeOrmModule.forRoot(DataSource.options),
+        JwtSharedModule,
         LessonModule,
         UserModule,
+        WorkerModule,
     ],
     controllers: [],
     providers: [],

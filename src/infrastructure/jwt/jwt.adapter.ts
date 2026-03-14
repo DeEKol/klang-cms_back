@@ -1,13 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService, JwtSignOptions } from "@nestjs/jwt";
 
-import { IJwtPayload, IJwtPort } from "../../../domains/ports/out/i-jwt.port";
-
 @Injectable()
-export class JwtAuthAdapter implements IJwtPort {
+export class JwtAdapter {
     constructor(private readonly jwtService: JwtService) {}
 
-    sign(payload: IJwtPayload): Promise<string> {
+    sign(payload: object): Promise<string> {
         return this.jwtService.signAsync(payload, {
             expiresIn: process.env.JWT_EXPIRES_IN,
         } as JwtSignOptions);

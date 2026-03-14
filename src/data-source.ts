@@ -4,6 +4,7 @@ import { SectionOrmEntity } from "./modules/lesson/infrastructure/persistence/se
 import { LessonOrmEntity } from "./modules/lesson/infrastructure/persistence/lesson/lesson.orm-entity";
 import { UserOrmEntity } from "./modules/user/infrastructure/persistence/user/user.orm-entity";
 import { UserProgressOrmEntity } from "./modules/lesson/infrastructure/persistence/user-progress/user-progress.orm-entity";
+import { WorkerOrmEntity } from "./modules/worker/infrastructure/persistence/worker/worker.orm-entity";
 
 export default new DataSource({
     type: "sqlite",
@@ -15,6 +16,7 @@ export default new DataSource({
         LessonOrmEntity,
         UserOrmEntity,
         UserProgressOrmEntity,
+        WorkerOrmEntity,
     ],
     synchronize: false,
     migrations: [__dirname + "/migrations/*.ts"],

@@ -25,8 +25,7 @@ export class LessonCrudService implements ILessonUseCases {
     }
 
     async getSections(): Promise<SectionEntity[] | []> {
-        const sectionOrmEntities =
-            await this._lessonCrudPorts.getSections();
+        const sectionOrmEntities = await this._lessonCrudPorts.getSections();
 
         return sectionOrmEntities.reduce((acc, sectionOrmEntity) => {
             const sectionEntity = SectionEntity.mapToDomain(sectionOrmEntity);
