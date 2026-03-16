@@ -236,7 +236,7 @@ Migrations are ignored by ESLint (see `ignorePatterns`).
 - **Runtime**: Node.js with TypeScript 5.6
 - **ORM**: TypeORM 0.3
 - **Database**: SQLite (development)
-- **Authentication**: Firebase Admin SDK, NestJS JWT
+- **Authentication**: Firebase Admin SDK (mobile/user) + JWT via Passport (CMS/worker). See [docs/AUTH.md](docs/AUTH.md)
 - **Validation**: class-validator
 - **API Docs**: NestJS Swagger
 
@@ -280,6 +280,15 @@ When adding new controllers/providers:
 - Controllers go in `{module}/modules/api/*-api.module.ts`
 - Persistence adapters go in `{module}/modules/persistence/*-persistence.module.ts`
 - Persistence modules are typically marked `@Global()` for repository DI
+
+## Authentication
+
+Two separate auth flows for two applications:
+
+- **Mobile app (User)** — Firebase ID token, guard: `UserAuthGuard`
+- **CMS (Worker)** — App-issued JWT, guard: `WorkerAuthGuard` + optional `WorkerRolesGuard`
+
+See **[docs/AUTH.md](docs/AUTH.md)** for full details: strategies, guards, decorators, role usage examples.
 
 ## Testing Strategy
 
