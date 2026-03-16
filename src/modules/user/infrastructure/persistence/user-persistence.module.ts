@@ -14,10 +14,7 @@ import { UserFirebaseStrategy } from "./auth/user-firebase.strategy";
 
 @Global()
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UserOrmEntity]),
-        PassportModule,
-    ],
+    imports: [TypeOrmModule.forFeature([UserOrmEntity]), PassportModule],
     controllers: [],
     providers: [
         FirebaseAuthAdapter,
