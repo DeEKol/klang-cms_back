@@ -10,4 +10,14 @@ export class JwtAdapter {
             expiresIn: process.env.JWT_EXPIRES_IN || "15m",
         } as JwtSignOptions);
     }
+
+    signRefresh(payload: object): Promise<string> {
+        return this.jwtService.signAsync(payload, {
+            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+        } as JwtSignOptions);
+    }
+
+    verifyRefresh(token: string): Promise<Record<string, unknown>> {
+        return this.jwtService.verifyAsync(token);
+    }
 }

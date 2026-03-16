@@ -23,6 +23,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/node": "22.7.5",
     "@types/passport-jwt": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "5.0.0",
@@ -48,6 +49,7 @@
     "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
     "class-validator": "0.14.2",
+    "cookie-parser": "^1.4.7",
     "firebase-admin": "13.5.0",
     "passport": "^0.7.0",
     "passport-custom": "^1.1.1",

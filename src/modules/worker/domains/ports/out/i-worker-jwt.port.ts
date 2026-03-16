@@ -8,4 +8,6 @@ export interface IWorkerJwtPayload {
 
 export interface IWorkerJwtPort {
     sign(payload: IWorkerJwtPayload): Promise<string>;
+    signRefresh(payload: IWorkerJwtPayload): Promise<string>;
+    verifyRefresh(token: string): Promise<Record<string, unknown>>;
 }
