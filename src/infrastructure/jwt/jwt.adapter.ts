@@ -7,7 +7,7 @@ export class JwtAdapter {
 
     sign(payload: object): Promise<string> {
         return this.jwtService.signAsync(payload, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+            expiresIn: process.env.JWT_EXPIRES_IN || "15m",
         } as JwtSignOptions);
     }
 }
