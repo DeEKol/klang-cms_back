@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> Full architecture reference: **[docs/ARCH.md](docs/ARCH.md)**
+
 ## Architecture Overview
 
 This is a NestJS backend for klang-cms using **Hexagonal Architecture** (Ports & Adapters pattern). The codebase is organized into feature modules, each following a strict layered structure.
