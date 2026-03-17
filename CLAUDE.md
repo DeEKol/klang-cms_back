@@ -336,7 +336,7 @@ Two separate Swagger UIs:
 | `/api/cms` | CMS workers | `CMS / Workers`, `CMS` | `WorkerApiModule`, `LessonCmsApiModule` |
 | `/api/mobile` | Mobile users | `Mobile / Auth`, `Mobile` | `UserApiModule`, `LessonMobileApiModule` |
 
-See **[docs/AUTH.md — Swagger](docs/AUTH.md#swagger)** and **[docs/LESSON_API_SPLIT.md](docs/LESSON_API_SPLIT.md)** for full details.
+See **[docs/AUTH.md — Swagger](docs/AUTH.md#swagger)** and **[docs/API.md](docs/API.md)** for full details.
 
 ## Testing Strategy
 
