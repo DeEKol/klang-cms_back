@@ -1,5 +1,5 @@
 import { ManyToOne, JoinColumn } from "typeorm";
-import { UserOrmEntity } from "../../modules/user/infrastructure/persistence/user/user.orm-entity";
+import { UserOrmEntity } from "@modules/user/infrastructure/persistence/user/user.orm-entity";
 
 /**
  * Applies ManyToOne relation to UserOrmEntity with join column "user_id".

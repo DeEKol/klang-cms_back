@@ -9,7 +9,7 @@ import { TokenService } from "../../domains/services/token.service";
 import { FirebaseAuthAdapter } from "./firebase/firebase-auth.adapter";
 import { UserRepositoryAdapter } from "./user-repository.adapter";
 import { UserOrmEntity } from "./user/user.orm-entity";
-import { JwtAdapter } from "../../../../infrastructure/jwt/jwt.adapter";
+import { JwtAdapter } from "@infrastructure/jwt/jwt.adapter";
 import { UserFirebaseStrategy } from "./auth/user-firebase.strategy";
 
 @Global()

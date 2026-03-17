@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Param, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { UserAuthGuard } from "../../../../../infrastructure/auth/guards/user-auth.guard";
+import { UserAuthGuard } from "@infrastructure/auth/guards/user-auth.guard";
 import { ILessonUseCases, SLessonCrudUseCases } from "../../../domains/ports/in/i-lesson.use-cases";
 import { GetSectionCommand } from "../../../domains/ports/in/get-section.command";
 import { GetLessonCommand } from "../../../domains/ports/in/get-lesson.command";

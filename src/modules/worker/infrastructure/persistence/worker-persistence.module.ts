@@ -7,7 +7,7 @@ import { WorkerService } from "../../domains/services/worker.service";
 import { BcryptPasswordAdapter } from "./password/bcrypt-password.adapter";
 import { WorkerRepositoryAdapter } from "./worker-repository.adapter";
 import { WorkerOrmEntity } from "./worker/worker.orm-entity";
-import { JwtAdapter } from "../../../../infrastructure/jwt/jwt.adapter";
+import { JwtAdapter } from "@infrastructure/jwt/jwt.adapter";
 import { WorkerJwtStrategy } from "./auth/worker-jwt.strategy";
 
 @Global()

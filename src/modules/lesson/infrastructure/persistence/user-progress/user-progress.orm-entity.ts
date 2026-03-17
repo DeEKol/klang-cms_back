@@ -11,7 +11,7 @@ import {
 
 import { LessonOrmEntity } from "../lesson/lesson.orm-entity";
 import { PageOrmEntity } from "../lesson-page/page.orm-entity";
-import { UserRelation } from "../../../../../infrastructure/relations/user-relation.decorator";
+import { UserRelation } from "@infrastructure/relations/user-relation.decorator";
 
 @Entity({ name: "user_progress" })
 @Unique(["userId", "lesson"])

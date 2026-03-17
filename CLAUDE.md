@@ -184,6 +184,34 @@ See [PLOP_TEMPLATES_GUIDE.md](PLOP_TEMPLATES_GUIDE.md) for detailed template doc
 - **Ports (interfaces)**: `i-*.port.ts`
 - **DTOs**: `*.dto.ts`
 
+## Import Conventions
+
+Two TypeScript path aliases are configured:
+
+| Alias | Resolves to | Use for |
+|---|---|---|
+| `@infrastructure/*` | `src/infrastructure/*` | Shared infra (auth guards, JWT, relation decorators) |
+| `@modules/*` | `src/modules/*` | Cross-module references |
+
+**Rules:**
+- **Cross-boundary** (`infrastructure ↔ modules`, `modules/foo ↔ modules/bar`): use aliases
+- **Within a module**: use relative `./` or `../` paths
+
+```typescript
+// ✅ Cross-boundary: aliases
+import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
+import { WorkerRole } from "@modules/worker/domains/entities/worker.entity";
+
+// ✅ Within-module: relative
+import { LessonEntity } from "../../entities/lesson.entity";
+
+// ❌ Never: deep relative cross-boundary
+import { WorkerRole } from "../../../../worker/domains/entities/worker.entity";
+```
+
+Runtime alias resolution: `tsconfig-paths` (dev), `tsc-alias` (prod build).
+See [docs/IMPORTS.md](docs/IMPORTS.md) for full details.
+
 ## Development Commands
 
 ```bash

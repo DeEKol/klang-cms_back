@@ -20,28 +20,28 @@ LessonCmsController  LessonMobileController
 
 ### CMS (Worker) — полный CRUD
 
-| Метод | Путь | Роль |
-|---|---|---|
-| `GET` | `/cms/sections` | any worker |
-| `GET` | `/cms/sections/:id` | any worker |
-| `POST` | `/cms/sections` | admin, editor |
-| `PATCH` | `/cms/sections/:id` | admin, editor |
-| `DELETE` | `/cms/sections/:id` | admin |
-| `GET` | `/cms/lessons/:id` | any worker |
-| `POST` | `/cms/lessons` | admin, editor |
-| `PATCH` | `/cms/lessons/:id` | admin, editor |
-| `DELETE` | `/cms/lessons/:id` | admin |
-| `POST` | `/cms/pages` | admin, editor |
-| `PATCH` | `/cms/pages/:id` | admin, editor |
-| `DELETE` | `/cms/pages/:id` | admin |
+| Метод    | Путь                | Роль          |
+| -------- | ------------------- | ------------- |
+| `GET`    | `/cms/sections`     | any worker    |
+| `GET`    | `/cms/sections/:id` | any worker    |
+| `POST`   | `/cms/sections`     | admin, editor |
+| `PATCH`  | `/cms/sections/:id` | admin, editor |
+| `DELETE` | `/cms/sections/:id` | admin         |
+| `GET`    | `/cms/lessons/:id`  | any worker    |
+| `POST`   | `/cms/lessons`      | admin, editor |
+| `PATCH`  | `/cms/lessons/:id`  | admin, editor |
+| `DELETE` | `/cms/lessons/:id`  | admin         |
+| `POST`   | `/cms/pages`        | admin, editor |
+| `PATCH`  | `/cms/pages/:id`    | admin, editor |
+| `DELETE` | `/cms/pages/:id`    | admin         |
 
 ### Mobile (User) — только чтение
 
-| Метод | Путь | Описание |
-|---|---|---|
-| `GET` | `/mob/sections` | Список всех секций |
-| `GET` | `/mob/sections/:id` | Секция с уроками |
-| `GET` | `/mob/lessons/:id` | Урок со страницами |
+| Метод | Путь                | Описание           |
+| ----- | ------------------- | ------------------ |
+| `GET` | `/mob/sections`     | Список всех секций |
+| `GET` | `/mob/sections/:id` | Секция с уроками   |
+| `GET` | `/mob/lessons/:id`  | Урок со страницами |
 
 > Прогресс пользователя (`POST /mob/lessons/:id/progress`, `GET /mob/lessons/:id/progress`) будет в модуле `user-progress`.
 
@@ -77,19 +77,19 @@ src/modules/lesson/infrastructure/api/
 ```typescript
 // lesson-cms-api.module.ts
 @Module({
-    controllers: [LessonCmsController],
+  controllers: [LessonCmsController],
 })
 export class LessonCmsApiModule {}
 
 // lesson-mobile-api.module.ts
 @Module({
-    controllers: [LessonMobileController],
+  controllers: [LessonMobileController],
 })
 export class LessonMobileApiModule {}
 
 // lesson-api.module.ts
 @Module({
-    imports: [LessonCmsApiModule, LessonMobileApiModule],
+  imports: [LessonCmsApiModule, LessonMobileApiModule],
 })
 export class LessonApiModule {}
 ```
@@ -100,19 +100,19 @@ export class LessonApiModule {}
 
 Два отдельных Swagger UI — каждый содержит только свои эндпоинты:
 
-| Swagger UI | Путь | Теги |
-|---|---|---|
-| CMS | `/api/cms` | `CMS / Workers`, `CMS` |
-| Mobile | `/api/mobile` | `Mobile / Auth`, `Mobile` |
+| Swagger UI | Путь          | Теги                      |
+| ---------- | ------------- | ------------------------- |
+| CMS        | `/api/cms`    | `CMS / Workers`, `CMS`    |
+| Mobile     | `/api/mobile` | `Mobile / Auth`, `Mobile` |
 
 Контроллеры по тегам:
 
-| Тег | Контроллер | Модуль |
-|---|---|---|
-| `CMS / Workers` | `WorkerApiController` | `WorkerApiModule` |
-| `CMS` | `LessonCmsController` | `LessonCmsApiModule` |
-| `Mobile / Auth` | `UserApiController` | `UserApiModule` |
-| `Mobile` | `LessonMobileController` | `LessonMobileApiModule` |
+| Тег             | Контроллер               | Модуль                  |
+| --------------- | ------------------------ | ----------------------- |
+| `CMS / Workers` | `WorkerApiController`    | `WorkerApiModule`       |
+| `CMS`           | `LessonCmsController`    | `LessonCmsApiModule`    |
+| `Mobile / Auth` | `UserApiController`      | `UserApiModule`         |
+| `Mobile`        | `LessonMobileController` | `LessonMobileApiModule` |
 
 > Подробнее о настройке двух Swagger-документов — см. [docs/AUTH.md](AUTH.md#swagger).
 

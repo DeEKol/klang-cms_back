@@ -1,6 +1,6 @@
 import { SetMetadata } from "@nestjs/common";
 
-import { WorkerRole } from "../../../modules/worker/domains/entities/worker.entity";
+import { WorkerRole } from "@modules/worker/domains/entities/worker.entity";
 
 export const ROLES_KEY = "roles";
 

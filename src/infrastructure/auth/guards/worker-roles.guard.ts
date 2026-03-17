@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
-import { WorkerRole } from "../../../modules/worker/domains/entities/worker.entity";
+import { WorkerRole } from "@modules/worker/domains/entities/worker.entity";
 import { ROLES_KEY } from "../decorators/roles.decorator";
-import { IWorkerJwtPayload } from "../../../modules/worker/infrastructure/persistence/auth/worker-jwt.strategy";
+import { IWorkerJwtPayload } from "@modules/worker/infrastructure/persistence/auth/worker-jwt.strategy";
 
 /**
  * Checks that the authenticated worker has one of the required roles.

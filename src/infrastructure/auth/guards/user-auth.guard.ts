@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 
-import { USER_FIREBASE_STRATEGY } from "../../../modules/user/infrastructure/persistence/auth/user-firebase.strategy";
+import { USER_FIREBASE_STRATEGY } from "@modules/user/infrastructure/persistence/auth/user-firebase.strategy";
 
 /**
  * Protects endpoints for the mobile app.

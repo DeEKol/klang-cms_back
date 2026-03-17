@@ -11,10 +11,10 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { WorkerAuthGuard } from "../../../../../infrastructure/auth/guards/worker-auth.guard";
-import { WorkerRolesGuard } from "../../../../../infrastructure/auth/guards/worker-roles.guard";
-import { Roles } from "../../../../../infrastructure/auth/decorators/roles.decorator";
-import { WorkerRole } from "../../../../worker/domains/entities/worker.entity";
+import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
+import { WorkerRolesGuard } from "@infrastructure/auth/guards/worker-roles.guard";
+import { Roles } from "@infrastructure/auth/decorators/roles.decorator";
+import { WorkerRole } from "@modules/worker/domains/entities/worker.entity";
 import { ILessonUseCases, SLessonCrudUseCases } from "../../../domains/ports/in/i-lesson.use-cases";
 import { GetSectionCommand } from "../../../domains/ports/in/get-section.command";
 import { CreateSectionCommand } from "../../../domains/ports/in/create-section.command";
@@ -162,10 +162,7 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN, WorkerRole.EDITOR)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async updatePage(
-        @Param("id") id: string,
-        @Body() dto: PageUpdateRequest,
-    ): Promise<boolean> {
+    async updatePage(@Param("id") id: string, @Body() dto: PageUpdateRequest): Promise<boolean> {
         return this.lessonUseCases.updatePage(
             new UpdatePageCommand(id, dto.lessonId, dto.pageNumber, dto.text),
         );

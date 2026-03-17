@@ -22,10 +22,10 @@ import { SignInRequest } from "./dto/sign-in.request";
 import { CreateWorkerRequest } from "./dto/create-worker.request";
 import { WorkerAuthResponse } from "./dto/worker-auth.response";
 import { WorkerResponse } from "./dto/worker.response";
-import { WorkerAuthGuard } from "../../../../infrastructure/auth/guards/worker-auth.guard";
-import { WorkerRolesGuard } from "../../../../infrastructure/auth/guards/worker-roles.guard";
-import { Roles } from "../../../../infrastructure/auth/decorators/roles.decorator";
-import { CurrentWorker } from "../../../../infrastructure/auth/decorators/current-worker.decorator";
+import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
+import { WorkerRolesGuard } from "@infrastructure/auth/guards/worker-roles.guard";
+import { Roles } from "@infrastructure/auth/decorators/roles.decorator";
+import { CurrentWorker } from "@infrastructure/auth/decorators/current-worker.decorator";
 import { IWorkerJwtPayload } from "../../infrastructure/persistence/auth/worker-jwt.strategy";
 
 const REFRESH_TOKEN_COOKIE = "refresh_token";

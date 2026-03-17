@@ -4,12 +4,17 @@
     "lib": ["es2017"],
     "module": "commonjs",
     "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@infrastructure/*": ["infrastructure/*"],
+      "@modules/*": ["modules/*"]
+    },
     "outDir": "dist",
     "strict": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": [
     "src"

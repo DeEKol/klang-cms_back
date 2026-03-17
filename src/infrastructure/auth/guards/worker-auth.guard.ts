@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 
-import { WORKER_JWT_STRATEGY } from "../../../modules/worker/infrastructure/persistence/auth/worker-jwt.strategy";
+import { WORKER_JWT_STRATEGY } from "@modules/worker/infrastructure/persistence/auth/worker-jwt.strategy";
 
 /**
  * Protects endpoints for the CMS web application (Worker JWT).
