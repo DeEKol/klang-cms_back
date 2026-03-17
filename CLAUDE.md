@@ -290,6 +290,26 @@ Two separate auth flows for two applications:
 
 See **[docs/AUTH.md](docs/AUTH.md)** for full details: strategies, guards, decorators, role usage examples.
 
+## Lesson API Structure
+
+Two consolidated controllers share one domain layer. Controllers do not import `*.entity.ts`.
+
+- **`LessonCmsController`** — `@Controller("cms")`, `WorkerAuthGuard`, full CRUD for sections/lessons/pages
+- **`LessonMobileController`** — `@Controller("mob")`, `UserAuthGuard`, read-only sections/lessons
+
+Controllers live in `src/modules/lesson/infrastructure/api/cms/lesson-cms.controller.ts` and `.../mobile/lesson-mobile.controller.ts`.
+
+## Swagger
+
+Two separate Swagger UIs:
+
+| Path | Audience | Tags | Includes |
+|---|---|---|---|
+| `/api/cms` | CMS workers | `CMS / Workers`, `CMS` | `WorkerApiModule`, `LessonCmsApiModule` |
+| `/api/mobile` | Mobile users | `Mobile / Auth`, `Mobile` | `UserApiModule`, `LessonMobileApiModule` |
+
+See **[docs/AUTH.md — Swagger](docs/AUTH.md#swagger)** and **[docs/LESSON_API_SPLIT.md](docs/LESSON_API_SPLIT.md)** for full details.
+
 ## Testing Strategy
 
 Test files go in `src/{module}/tests/`. The plop generator creates test skeletons (`{entity}.spec.ts`).

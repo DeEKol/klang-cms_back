@@ -34,12 +34,12 @@ const REFRESH_COOKIE_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict" as const,
-    path: "/workers/auth/refresh",
+    path: "/cms/workers/auth/refresh",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7d in ms
 };
 
-@ApiTags("Workers")
-@Controller("workers")
+@ApiTags("CMS / Workers")
+@Controller("cms/workers")
 export class WorkerApiController {
     constructor(@Inject(SWorkerUseCases) private readonly workerUseCases: IWorkerUseCases) {}
 
