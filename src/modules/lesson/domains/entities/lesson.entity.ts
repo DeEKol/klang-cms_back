@@ -40,8 +40,7 @@ export class LessonEntity {
             return acc;
         }, [] as PageEntity[]);
 
-        if (data)
-            return new LessonEntity(data.id, data.text, data.order, lessonPageArray ?? []);
+        if (data) return new LessonEntity(data.id, data.text, data.order, lessonPageArray ?? []);
         else return null;
     }
 }

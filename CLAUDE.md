@@ -340,6 +340,12 @@ Two separate Swagger UIs:
 
 See **[docs/AUTH.md — Swagger](docs/AUTH.md#swagger)** and **[docs/API.md](docs/API.md)** for full details.
 
+## Tasks
+
+Task files live in `tasks/` directory, named `YYYY-MM-DD--TASK-NNN--kebab-slug.md`.
+
+See **[docs/TASKS.md](docs/TASKS.md)** for format, frontmatter fields, and rules.
+
 ## Testing Strategy
 
 Test files go in `src/{module}/tests/`. The plop generator creates test skeletons (`{entity}.spec.ts`).
