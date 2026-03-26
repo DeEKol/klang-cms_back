@@ -1,3 +1,5 @@
+import { Result } from "@infrastructure/result/result";
+import { UnauthorizedError } from "@infrastructure/errors/domain-errors";
 import { SignInWithFirebaseCommand } from "./sign-in-with-firebase.command";
 
 export const SUserUseCases = Symbol("UserUseCases");
@@ -9,5 +11,5 @@ export interface IUserTokens {
 }
 
 export interface IUserUseCases {
-    signInWithFirebase(command: SignInWithFirebaseCommand): Promise<IUserTokens>;
+    signInWithFirebase(command: SignInWithFirebaseCommand): Promise<Result<IUserTokens, UnauthorizedError>>;
 }

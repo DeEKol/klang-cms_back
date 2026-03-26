@@ -340,6 +340,15 @@ Two separate Swagger UIs:
 
 See **[docs/AUTH.md — Swagger](docs/AUTH.md#swagger)** and **[docs/API.md](docs/API.md)** for full details.
 
+## Error & Exception Handling
+
+- **DomainError** (предсказуемые исходы) → `Result<T, E>` монада, не бросается
+- **Exception** (неожиданные ситуации) → `throw` + `GlobalExceptionFilter`
+
+Domain-сервисы не импортируют NestJS-исключения. Контроллер конвертирует через `DomainErrorMapper.toHttpException(result.error)`.
+
+See **[docs/THROWABLE.md](docs/THROWABLE.md)** for full details.
+
 ## Tasks
 
 Task files live in `tasks/` directory, named `YYYY-MM-DD--TASK-NNN--kebab-slug.md`.

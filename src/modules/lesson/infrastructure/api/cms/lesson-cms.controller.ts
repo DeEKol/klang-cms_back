@@ -11,6 +11,7 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+import { DomainErrorMapper } from "@infrastructure/errors/domain-error.mapper";
 import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
 import { WorkerRolesGuard } from "@infrastructure/auth/guards/worker-roles.guard";
 import { Roles } from "@infrastructure/auth/decorators/roles.decorator";
@@ -65,9 +66,11 @@ export class LessonCmsController {
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: SectionResponse })
     async getSection(@Param("id") id: string): Promise<SectionResponse | null> {
-        return SectionResponse.mapToResponse(
-            await this.lessonUseCases.getSection(new GetSectionCommand(id)),
-        );
+        const result = await this.lessonUseCases.getSection(new GetSectionCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return SectionResponse.mapToResponse(result.value);
     }
 
     @Post("sections")
@@ -85,11 +88,14 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN, WorkerRole.EDITOR)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async updateSection(
-        @Param("id") id: string,
-        @Body() dto: SectionUpdateRequest,
-    ): Promise<boolean> {
-        return this.lessonUseCases.updateSection(new UpdateSectionCommand(id, dto.text));
+    async updateSection(@Param("id") id: string, @Body() dto: SectionUpdateRequest): Promise<true> {
+        const result = await this.lessonUseCases.updateSection(
+            new UpdateSectionCommand(id, dto.text),
+        );
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 
     @Delete("sections/:id")
@@ -97,8 +103,12 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async deleteSection(@Param("id") id: string): Promise<boolean> {
-        return this.lessonUseCases.deleteSection(new DeleteSectionCommand(id));
+    async deleteSection(@Param("id") id: string): Promise<true> {
+        const result = await this.lessonUseCases.deleteSection(new DeleteSectionCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 
     // ─── Lessons ─────────────────────────────────────────────────────────────
@@ -107,9 +117,11 @@ export class LessonCmsController {
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: LessonResponse })
     async getLesson(@Param("id") id: string): Promise<LessonResponse | null> {
-        return LessonResponse.mapToResponse(
-            await this.lessonUseCases.getLesson(new GetLessonCommand(id)),
-        );
+        const result = await this.lessonUseCases.getLesson(new GetLessonCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return LessonResponse.mapToResponse(result.value);
     }
 
     @Post("lessons")
@@ -127,11 +139,14 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN, WorkerRole.EDITOR)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async updateLesson(
-        @Param("id") id: string,
-        @Body() dto: LessonUpdateRequest,
-    ): Promise<boolean> {
-        return this.lessonUseCases.updateLesson(new UpdateLessonCommand(id, dto.text));
+    async updateLesson(@Param("id") id: string, @Body() dto: LessonUpdateRequest): Promise<true> {
+        const result = await this.lessonUseCases.updateLesson(
+            new UpdateLessonCommand(id, dto.text),
+        );
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 
     @Delete("lessons/:id")
@@ -139,8 +154,12 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async deleteLesson(@Param("id") id: string): Promise<boolean> {
-        return this.lessonUseCases.deleteLesson(new DeleteLessonCommand(id));
+    async deleteLesson(@Param("id") id: string): Promise<true> {
+        const result = await this.lessonUseCases.deleteLesson(new DeleteLessonCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 
     // ─── Pages ───────────────────────────────────────────────────────────────
@@ -162,10 +181,14 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN, WorkerRole.EDITOR)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async updatePage(@Param("id") id: string, @Body() dto: PageUpdateRequest): Promise<boolean> {
-        return this.lessonUseCases.updatePage(
+    async updatePage(@Param("id") id: string, @Body() dto: PageUpdateRequest): Promise<true> {
+        const result = await this.lessonUseCases.updatePage(
             new UpdatePageCommand(id, dto.lessonId, dto.pageNumber, dto.text),
         );
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 
     @Delete("pages/:id")
@@ -173,7 +196,11 @@ export class LessonCmsController {
     @Roles(WorkerRole.ADMIN)
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: Boolean })
-    async deletePage(@Param("id") id: string): Promise<boolean> {
-        return this.lessonUseCases.deletePage(new DeletePageCommand(id));
+    async deletePage(@Param("id") id: string): Promise<true> {
+        const result = await this.lessonUseCases.deletePage(new DeletePageCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return result.value;
     }
 }

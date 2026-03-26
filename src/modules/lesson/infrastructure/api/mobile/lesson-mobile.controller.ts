@@ -1,6 +1,7 @@
 import { Controller, Get, Inject, Param, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+import { DomainErrorMapper } from "@infrastructure/errors/domain-error.mapper";
 import { UserAuthGuard } from "@infrastructure/auth/guards/user-auth.guard";
 import { ILessonUseCases, SLessonCrudUseCases } from "../../../domains/ports/in/i-lesson.use-cases";
 import { GetSectionCommand } from "../../../domains/ports/in/get-section.command";
@@ -36,9 +37,11 @@ export class LessonMobileController {
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: SectionResponse })
     async getSection(@Param("id") id: string): Promise<SectionResponse | null> {
-        return SectionResponse.mapToResponse(
-            await this.lessonUseCases.getSection(new GetSectionCommand(id)),
-        );
+        const result = await this.lessonUseCases.getSection(new GetSectionCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return SectionResponse.mapToResponse(result.value);
     }
 
     // ─── Lessons ─────────────────────────────────────────────────────────────
@@ -47,8 +50,10 @@ export class LessonMobileController {
     @ApiParam({ name: "id", type: "string" })
     @ApiResponse({ status: 200, type: LessonResponse })
     async getLesson(@Param("id") id: string): Promise<LessonResponse | null> {
-        return LessonResponse.mapToResponse(
-            await this.lessonUseCases.getLesson(new GetLessonCommand(id)),
-        );
+        const result = await this.lessonUseCases.getLesson(new GetLessonCommand(id));
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return LessonResponse.mapToResponse(result.value);
     }
 }

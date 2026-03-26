@@ -211,6 +211,26 @@ export enum WorkerRole { ADMIN = "admin", EDITOR = "editor" }
 
 ---
 
+## Error & Exception Handling
+
+`DomainError` (предсказуемый исход) обрабатывается через монаду `Result<T, E>`. Исключения (неожиданные ситуации) — через `throw` + `GlobalExceptionFilter`.
+
+```
+Domain service  →  Result.ok(value) | Result.err(new XxxError())
+Controller      →  if (!result.ok) throw DomainErrorMapper.toHttpException(result.error)
+GlobalFilter    →  @Catch(*) → { statusCode, error, message }
+```
+
+| Слой | Правило |
+|---|---|
+| Domain service | Возвращает `Result`, не импортирует NestJS-исключения |
+| Controller | Читает `result.ok`, конвертирует через `DomainErrorMapper` |
+| Infrastructure | `GlobalExceptionFilter` — единый формат всех ответов с ошибкой |
+
+Подробнее — [THROWABLE.md](THROWABLE.md).
+
+---
+
 ## Import Conventions
 
 | Алиас | Резолвится в | Применение |

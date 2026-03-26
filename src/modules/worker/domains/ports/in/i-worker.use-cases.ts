@@ -1,3 +1,5 @@
+import { Result } from "@infrastructure/result/result";
+import { ConflictError, UnauthorizedError } from "@infrastructure/errors/domain-errors";
 import { WorkerEntity } from "../../entities/worker.entity";
 import { SignInCommand } from "./sign-in.command";
 import { CreateWorkerCommand } from "./create-worker.command";
@@ -17,7 +19,7 @@ export interface IWorkerAccessToken {
 }
 
 export interface IWorkerUseCases {
-    signIn(command: SignInCommand): Promise<IWorkerTokens>;
-    refresh(command: RefreshTokenCommand): Promise<IWorkerAccessToken>;
-    createWorker(command: CreateWorkerCommand): Promise<WorkerEntity>;
+    signIn(command: SignInCommand): Promise<Result<IWorkerTokens, UnauthorizedError>>;
+    refresh(command: RefreshTokenCommand): Promise<Result<IWorkerAccessToken, UnauthorizedError>>;
+    createWorker(command: CreateWorkerCommand): Promise<Result<WorkerEntity, ConflictError>>;
 }

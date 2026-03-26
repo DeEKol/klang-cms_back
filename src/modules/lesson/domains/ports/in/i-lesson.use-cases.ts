@@ -1,3 +1,5 @@
+import { Result } from "@infrastructure/result/result";
+import { NotFoundError } from "@infrastructure/errors/domain-errors";
 import { LessonEntity } from "../../entities/lesson.entity";
 import { PageEntity } from "../../entities/page.entity";
 import { SectionEntity } from "../../entities/section.entity";
@@ -16,18 +18,18 @@ import { CreateSectionCommand } from "./create-section.command";
 export const SLessonCrudUseCases = Symbol("LessonCrudUseCases");
 
 export interface ILessonUseCases {
-    getSection(command: GetSectionCommand): Promise<SectionEntity | null>;
-    getSections(): Promise<SectionEntity[] | []>;
-    createSection(command: CreateSectionCommand): Promise<SectionEntity | null>;
-    updateSection(command: UpdateSectionCommand): Promise<boolean>;
-    deleteSection(command: DeleteSectionCommand): Promise<boolean>;
+    getSection(command: GetSectionCommand): Promise<Result<SectionEntity, NotFoundError>>;
+    getSections(): Promise<SectionEntity[]>;
+    createSection(command: CreateSectionCommand): Promise<SectionEntity>;
+    updateSection(command: UpdateSectionCommand): Promise<Result<true, NotFoundError>>;
+    deleteSection(command: DeleteSectionCommand): Promise<Result<true, NotFoundError>>;
 
-    getLesson(command: GetLessonCommand): Promise<LessonEntity | null>;
-    createLesson(command: CreateLessonCommand): Promise<LessonEntity | null>;
-    updateLesson(command: UpdateLessonCommand): Promise<boolean>;
-    deleteLesson(command: DeleteLessonCommand): Promise<boolean>;
+    getLesson(command: GetLessonCommand): Promise<Result<LessonEntity, NotFoundError>>;
+    createLesson(command: CreateLessonCommand): Promise<LessonEntity>;
+    updateLesson(command: UpdateLessonCommand): Promise<Result<true, NotFoundError>>;
+    deleteLesson(command: DeleteLessonCommand): Promise<Result<true, NotFoundError>>;
 
-    createPage(command: CreatePageCommand): Promise<PageEntity | null>;
-    deletePage(command: DeletePageCommand): Promise<boolean>;
-    updatePage(command: UpdatePageCommand): Promise<boolean>;
+    createPage(command: CreatePageCommand): Promise<PageEntity>;
+    updatePage(command: UpdatePageCommand): Promise<Result<true, NotFoundError>>;
+    deletePage(command: DeletePageCommand): Promise<Result<true, NotFoundError>>;
 }

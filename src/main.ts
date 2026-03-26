@@ -3,6 +3,8 @@ import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cookieParser from "cookie-parser";
 
+import { GlobalExceptionFilter } from "./infrastructure/filters/global-exception.filter";
+
 import { WorkerApiModule } from "./modules/worker/infrastructure/api/worker-api.module";
 import { LessonCmsApiModule } from "./modules/lesson/infrastructure/api/cms/lesson-cms-api.module";
 import { LessonMobileApiModule } from "./modules/lesson/infrastructure/api/mobile/lesson-mobile-api.module";
@@ -11,6 +13,7 @@ import { UserApiModule } from "./modules/user/infrastructure/api/user-api.module
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+    app.useGlobalFilters(new GlobalExceptionFilter());
     app.use(cookieParser());
 
     app.enableCors({

@@ -13,6 +13,11 @@ import {
 import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
 
+import { DomainErrorMapper } from "@infrastructure/errors/domain-error.mapper";
+import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
+import { WorkerRolesGuard } from "@infrastructure/auth/guards/worker-roles.guard";
+import { Roles } from "@infrastructure/auth/decorators/roles.decorator";
+import { CurrentWorker } from "@infrastructure/auth/decorators/current-worker.decorator";
 import { IWorkerUseCases, SWorkerUseCases } from "../../domains/ports/in/i-worker.use-cases";
 import { SignInCommand } from "../../domains/ports/in/sign-in.command";
 import { CreateWorkerCommand } from "../../domains/ports/in/create-worker.command";
@@ -22,10 +27,6 @@ import { SignInRequest } from "./dto/sign-in.request";
 import { CreateWorkerRequest } from "./dto/create-worker.request";
 import { WorkerAuthResponse } from "./dto/worker-auth.response";
 import { WorkerResponse } from "./dto/worker.response";
-import { WorkerAuthGuard } from "@infrastructure/auth/guards/worker-auth.guard";
-import { WorkerRolesGuard } from "@infrastructure/auth/guards/worker-roles.guard";
-import { Roles } from "@infrastructure/auth/decorators/roles.decorator";
-import { CurrentWorker } from "@infrastructure/auth/decorators/current-worker.decorator";
 import { IWorkerJwtPayload } from "../../infrastructure/persistence/auth/worker-jwt.strategy";
 
 const REFRESH_TOKEN_COOKIE = "refresh_token";
@@ -55,11 +56,13 @@ export class WorkerApiController {
         @Body() dto: SignInRequest,
         @Res({ passthrough: true }) res: Response,
     ): Promise<WorkerAuthResponse> {
-        const tokens = await this.workerUseCases.signIn(new SignInCommand(dto.email, dto.password));
+        const result = await this.workerUseCases.signIn(new SignInCommand(dto.email, dto.password));
 
-        res.cookie(REFRESH_TOKEN_COOKIE, tokens.refreshToken, REFRESH_COOKIE_OPTIONS);
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
 
-        return WorkerAuthResponse.mapToResponse(tokens);
+        res.cookie(REFRESH_TOKEN_COOKIE, result.value.refreshToken, REFRESH_COOKIE_OPTIONS);
+
+        return WorkerAuthResponse.mapToResponse(result.value);
     }
 
     @Post("auth/refresh")
@@ -72,7 +75,7 @@ export class WorkerApiController {
     })
     async refresh(
         @Req() req: Request,
-        @Res({ passthrough: true }) res: Response,
+        @Res({ passthrough: true }) _res: Response,
     ): Promise<WorkerAuthResponse> {
         const refreshToken: string | undefined = (req.cookies as Record<string, string>)[
             REFRESH_TOKEN_COOKIE
@@ -82,9 +85,11 @@ export class WorkerApiController {
             throw new UnauthorizedException("Refresh token not found");
         }
 
-        const tokens = await this.workerUseCases.refresh(new RefreshTokenCommand(refreshToken));
+        const result = await this.workerUseCases.refresh(new RefreshTokenCommand(refreshToken));
 
-        return WorkerAuthResponse.mapToResponse(tokens);
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return WorkerAuthResponse.mapToResponse(result.value);
     }
 
     @Post()
@@ -101,9 +106,12 @@ export class WorkerApiController {
         @Body() dto: CreateWorkerRequest,
         @CurrentWorker() _worker: IWorkerJwtPayload,
     ): Promise<WorkerResponse> {
-        const worker = await this.workerUseCases.createWorker(
+        const result = await this.workerUseCases.createWorker(
             new CreateWorkerCommand(dto.email, dto.password, dto.role, dto.displayName),
         );
-        return WorkerResponse.mapToResponse(worker);
+
+        if (!result.ok) throw DomainErrorMapper.toHttpException(result.error);
+
+        return WorkerResponse.mapToResponse(result.value);
     }
 }

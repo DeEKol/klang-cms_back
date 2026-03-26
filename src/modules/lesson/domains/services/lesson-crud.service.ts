@@ -1,3 +1,5 @@
+import { Result } from "@infrastructure/result/result";
+import { NotFoundError } from "@infrastructure/errors/domain-errors";
 import { PageEntity } from "../entities/page.entity";
 import { LessonEntity } from "../entities/lesson.entity";
 import { SectionEntity } from "../entities/section.entity";
@@ -18,78 +20,91 @@ import { UpdateSectionCommand } from "../ports/in/update-section.command";
 export class LessonCrudService implements ILessonUseCases {
     constructor(private readonly _lessonCrudPorts: ILessonCrudPorts) {}
 
-    async getSection(command: GetSectionCommand): Promise<SectionEntity | null> {
-        const sectionOrmEntity = await this._lessonCrudPorts.getSection(command.id);
+    async getSection(command: GetSectionCommand): Promise<Result<SectionEntity, NotFoundError>> {
+        const data = await this._lessonCrudPorts.getSection(command.id);
+        const section = SectionEntity.mapToDomain(data);
 
-        return SectionEntity.mapToDomain(sectionOrmEntity);
+        if (!section) return Result.err(new NotFoundError(`Section ${command.id} not found`));
+        return Result.ok(section);
     }
 
-    async getSections(): Promise<SectionEntity[] | []> {
-        const sectionOrmEntities = await this._lessonCrudPorts.getSections();
+    async getSections(): Promise<SectionEntity[]> {
+        const items = await this._lessonCrudPorts.getSections();
 
-        return sectionOrmEntities.reduce((acc, sectionOrmEntity) => {
-            const sectionEntity = SectionEntity.mapToDomain(sectionOrmEntity);
-
-            if (sectionEntity) acc.push(sectionEntity);
-
+        return items.reduce((acc, item) => {
+            const section = SectionEntity.mapToDomain(item);
+            if (section) acc.push(section);
             return acc;
         }, [] as SectionEntity[]);
     }
 
-    async createSection(command: CreateSectionCommand): Promise<SectionEntity | null> {
-        const sectionOrmEntity = await this._lessonCrudPorts.createSection(command.text);
-
-        return SectionEntity.mapToDomain(sectionOrmEntity);
+    async createSection(command: CreateSectionCommand): Promise<SectionEntity> {
+        const data = await this._lessonCrudPorts.createSection(command.text);
+        return SectionEntity.mapToDomain(data) as SectionEntity;
     }
 
-    deleteSection(command: DeleteSectionCommand): Promise<boolean> {
-        return this._lessonCrudPorts.deleteSection(command.id);
+    async updateSection(command: UpdateSectionCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.updateSection(command.id, command?.text);
+        return ok
+            ? Result.ok(true)
+            : Result.err(new NotFoundError(`Section ${command.id} not found`));
     }
 
-    updateSection(command: UpdateSectionCommand): Promise<boolean> {
-        return this._lessonCrudPorts.updateSection(command.id, command?.text);
+    async deleteSection(command: DeleteSectionCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.deleteSection(command.id);
+        return ok
+            ? Result.ok(true)
+            : Result.err(new NotFoundError(`Section ${command.id} not found`));
     }
 
-    async getLesson(command: GetLessonCommand): Promise<LessonEntity | null> {
-        const lessonOrmEntity = await this._lessonCrudPorts.getLesson(command.id);
+    async getLesson(command: GetLessonCommand): Promise<Result<LessonEntity, NotFoundError>> {
+        const data = await this._lessonCrudPorts.getLesson(command.id);
+        const lesson = LessonEntity.mapToDomain(data);
 
-        return LessonEntity.mapToDomain(lessonOrmEntity);
+        if (!lesson) return Result.err(new NotFoundError(`Lesson ${command.id} not found`));
+        return Result.ok(lesson);
     }
 
-    async createLesson(command: CreateLessonCommand): Promise<LessonEntity | null> {
-        const lessonOrmEntity = await this._lessonCrudPorts.createLesson(command.text);
-
-        return LessonEntity.mapToDomain(lessonOrmEntity);
+    async createLesson(command: CreateLessonCommand): Promise<LessonEntity> {
+        const data = await this._lessonCrudPorts.createLesson(command.text);
+        return LessonEntity.mapToDomain(data) as LessonEntity;
     }
 
-    updateLesson(command: UpdateLessonCommand): Promise<boolean> {
-        return this._lessonCrudPorts.updateLesson(command.id, command?.text);
+    async updateLesson(command: UpdateLessonCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.updateLesson(command.id, command?.text);
+        return ok
+            ? Result.ok(true)
+            : Result.err(new NotFoundError(`Lesson ${command.id} not found`));
     }
 
-    deleteLesson(command: DeleteLessonCommand): Promise<boolean> {
-        return this._lessonCrudPorts.deleteLesson(command.id);
+    async deleteLesson(command: DeleteLessonCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.deleteLesson(command.id);
+        return ok
+            ? Result.ok(true)
+            : Result.err(new NotFoundError(`Lesson ${command.id} not found`));
     }
 
-    async createPage(command: CreatePageCommand): Promise<PageEntity | null> {
-        const lessonPageOrmEntity = await this._lessonCrudPorts.createPage(
+    async createPage(command: CreatePageCommand): Promise<PageEntity> {
+        const data = await this._lessonCrudPorts.createPage(
             command.text,
             command.pageNumber,
             command.lessonId,
         );
-
-        return PageEntity.mapToDomain(lessonPageOrmEntity);
+        return PageEntity.mapToDomain(data) as PageEntity;
     }
 
-    updatePage(command: UpdatePageCommand): Promise<boolean> {
-        return this._lessonCrudPorts.updatePage(
+    async updatePage(command: UpdatePageCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.updatePage(
             command.id,
             command?.pageNumber,
             command?.text,
             command?.lessonId,
         );
+        return ok ? Result.ok(true) : Result.err(new NotFoundError(`Page ${command.id} not found`));
     }
 
-    deletePage(command: DeletePageCommand): Promise<boolean> {
-        return this._lessonCrudPorts.deletePage(command.id);
+    async deletePage(command: DeletePageCommand): Promise<Result<true, NotFoundError>> {
+        const ok = await this._lessonCrudPorts.deletePage(command.id);
+        return ok ? Result.ok(true) : Result.err(new NotFoundError(`Page ${command.id} not found`));
     }
 }

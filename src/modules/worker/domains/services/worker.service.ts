@@ -1,6 +1,8 @@
-import { ConflictException, Logger, UnauthorizedException } from "@nestjs/common";
+import { Logger } from "@nestjs/common";
 
-import { WorkerEntity } from "../entities/worker.entity";
+import { Result } from "@infrastructure/result/result";
+import { ConflictError, UnauthorizedError } from "@infrastructure/errors/domain-errors";
+import { WorkerEntity, WorkerRole } from "../entities/worker.entity";
 import { IWorkerUseCases, IWorkerTokens, IWorkerAccessToken } from "../ports/in/i-worker.use-cases";
 import { SignInCommand } from "../ports/in/sign-in.command";
 import { CreateWorkerCommand } from "../ports/in/create-worker.command";
@@ -8,7 +10,6 @@ import { RefreshTokenCommand } from "../ports/in/refresh-token.command";
 import { IWorkerRepositoryPort } from "../ports/out/i-worker-repository.port";
 import { IPasswordPort } from "../ports/out/i-password.port";
 import { IWorkerJwtPort, IWorkerJwtPayload } from "../ports/out/i-worker-jwt.port";
-import { WorkerRole } from "../entities/worker.entity";
 
 export class WorkerService implements IWorkerUseCases {
     private readonly logger = new Logger(WorkerService.name);
@@ -19,18 +20,18 @@ export class WorkerService implements IWorkerUseCases {
         private readonly jwtPort: IWorkerJwtPort,
     ) {}
 
-    async signIn(command: SignInCommand): Promise<IWorkerTokens> {
+    async signIn(command: SignInCommand): Promise<Result<IWorkerTokens, UnauthorizedError>> {
         const worker = await this.workerRepository.findByEmail(command.email);
 
         if (!worker) {
-            throw new UnauthorizedException("Invalid credentials");
+            return Result.err(new UnauthorizedError("Invalid credentials"));
         }
 
         const isValid = await this.passwordPort.compare(command.password, worker.passwordHash);
 
         if (!isValid) {
             this.logger.warn(`Failed sign-in attempt for email: ${command.email}`);
-            throw new UnauthorizedException("Invalid credentials");
+            return Result.err(new UnauthorizedError("Invalid credentials"));
         }
 
         const jwtPayload: IWorkerJwtPayload = {
@@ -44,20 +45,22 @@ export class WorkerService implements IWorkerUseCases {
             this.jwtPort.signRefresh(jwtPayload),
         ]);
 
-        return {
+        return Result.ok({
             accessToken,
             refreshToken,
             expiresIn: process.env.JWT_EXPIRES_IN || "15m",
-        };
+        });
     }
 
-    async refresh(command: RefreshTokenCommand): Promise<IWorkerAccessToken> {
+    async refresh(
+        command: RefreshTokenCommand,
+    ): Promise<Result<IWorkerAccessToken, UnauthorizedError>> {
         let raw: Record<string, unknown>;
 
         try {
             raw = await this.jwtPort.verifyRefresh(command.refreshToken);
         } catch {
-            throw new UnauthorizedException("Invalid or expired refresh token");
+            return Result.err(new UnauthorizedError("Invalid or expired refresh token"));
         }
 
         const accessToken = await this.jwtPort.sign({
@@ -66,23 +69,27 @@ export class WorkerService implements IWorkerUseCases {
             role: raw["role"] as WorkerRole,
         });
 
-        return { accessToken, expiresIn: process.env.JWT_EXPIRES_IN || "15m" };
+        return Result.ok({ accessToken, expiresIn: process.env.JWT_EXPIRES_IN || "15m" });
     }
 
-    async createWorker(command: CreateWorkerCommand): Promise<WorkerEntity> {
+    async createWorker(command: CreateWorkerCommand): Promise<Result<WorkerEntity, ConflictError>> {
         const existing = await this.workerRepository.findByEmail(command.email);
 
         if (existing) {
-            throw new ConflictException(`Worker with email ${command.email} already exists`);
+            return Result.err(
+                new ConflictError(`Worker with email ${command.email} already exists`),
+            );
         }
 
         const passwordHash = await this.passwordPort.hash(command.password);
 
-        return this.workerRepository.create({
+        const worker = await this.workerRepository.create({
             email: command.email,
             passwordHash,
             role: command.role,
             displayName: command.displayName,
         });
+
+        return Result.ok(worker);
     }
 }
